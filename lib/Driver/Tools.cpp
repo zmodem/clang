@@ -7485,6 +7485,7 @@ void visualstudio::Link::ConstructJob(Compilation &C, const JobAction &JA,
   }
 
   if (!Args.hasArg(options::OPT_nostdlib) &&
+      !Args.hasArg(options::OPT_nodefaultlibs) &&
       !Args.hasArg(options::OPT_nostartfiles) &&
       !C.getDriver().IsCLMode()) {
     CmdArgs.push_back("-defaultlib:libcmt");
@@ -7520,8 +7521,11 @@ void visualstudio::Link::ConstructJob(Compilation &C, const JobAction &JA,
     }
   }
 
-  Args.AddAllArgValues(CmdArgs, options::OPT_l);
   Args.AddAllArgValues(CmdArgs, options::OPT__SLASH_link);
+
+  if (Args.hasArg(options::OPT_shared)) {
+    CmdArgs.push_back("-dll");
+  }
 
   // Add filenames immediately.
   for (InputInfoList::const_iterator
@@ -7530,6 +7534,24 @@ void visualstudio::Link::ConstructJob(Compilation &C, const JobAction &JA,
       CmdArgs.push_back(it->getFilename());
     else
       it->getInputArg().renderAsInput(Args, CmdArgs);
+  }
+
+  // Add libraries with additional .lib suffix.
+  for (arg_iterator it = Args.filtered_begin(options::OPT_l),
+         ie = Args.filtered_end(); it != ie; ++it) {
+    (*it)->claim();
+    for (unsigned i = 0, e = (*it)->getNumValues(); i != e; ++i) {
+      CmdArgs.push_back(Args.MakeArgString((*it)->getValue(i) + std::string(".lib")));
+    }
+  }
+
+  // Add library paths.
+  for (arg_iterator it = Args.filtered_begin(options::OPT_L),
+         ie = Args.filtered_end(); it != ie; ++it) {
+    (*it)->claim();
+    for (unsigned i = 0, e = (*it)->getNumValues(); i != e; ++i) {
+      CmdArgs.push_back(Args.MakeArgString(std::string("-libpath:") + (*it)->getValue(i)));
+    }
   }
 
   const char *Exec =
