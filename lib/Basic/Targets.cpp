@@ -6219,7 +6219,7 @@ static TargetInfo *AllocateTarget(const llvm::Triple &Triple) {
     case llvm::Triple::Win32: {
       switch (Triple.getEnvironment()) {
       default:
-        return new X86_32TargetInfo(Triple);
+        return new WindowsX86_32TargetInfo(Triple);
       case llvm::Triple::Cygnus:
         return new CygwinX86_32TargetInfo(Triple);
       case llvm::Triple::GNU:
@@ -6264,7 +6264,7 @@ static TargetInfo *AllocateTarget(const llvm::Triple &Triple) {
     case llvm::Triple::Win32: {
       switch (Triple.getEnvironment()) {
       default:
-        return new X86_64TargetInfo(Triple);
+        return new WindowsX86_64TargetInfo(Triple);
       case llvm::Triple::GNU:
         return new MinGWX86_64TargetInfo(Triple);
       case llvm::Triple::MSVC:
