@@ -35,6 +35,10 @@ __declspec(dllexport)        int GlobalRedecl1;
 __declspec(dllexport) extern int GlobalRedecl2;
                              int GlobalRedecl2;
 
+// Export weak global.
+// CHECK-DAG: @WeakGlobal = weak dllexport global i32 0, align 4
+__declspec(dllexport) __attribute__((weak)) int WeakGlobal;
+
 
 
 //===----------------------------------------------------------------------===//

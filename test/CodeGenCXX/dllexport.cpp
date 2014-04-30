@@ -70,6 +70,11 @@ namespace ns { __declspec(dllexport) int ExternalGlobal; }
 // GNU-DAG: @ExternalAutoTypeGlobal                      = dllexport global %struct.External zeroinitializer, align 4
 __declspec(dllexport) auto ExternalAutoTypeGlobal = External();
 
+// Export weak global.
+// MSC-DAG: @"\01?WeakGlobal@@3HA" = weak dllexport global i32 0, align 4
+// GNU-DAG: @WeakGlobal            = weak dllexport global i32 0, align 4
+__declspec(dllexport) __attribute__((weak)) int WeakGlobal;
+
 
 
 //===----------------------------------------------------------------------===//
