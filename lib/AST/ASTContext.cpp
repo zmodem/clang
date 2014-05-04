@@ -7946,6 +7946,10 @@ bool ASTContext::DeclMustBeEmitted(const Decl *D) {
   const VarDecl *VD = cast<VarDecl>(D);
   assert(VD->isFileVarDecl() && "Expected file scoped var");
 
+  // Exported variables are required.
+  if (VD->hasAttr<DLLExportAttr>())
+    return true;
+
   if (VD->isThisDeclarationADefinition() == VarDecl::DeclarationOnly)
     return false;
 

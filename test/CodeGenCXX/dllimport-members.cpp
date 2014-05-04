@@ -180,16 +180,19 @@ public:
   // MSC-DAG: @"\01?StaticConstField@ImportMembers@@2HB"          = external dllimport constant i32
   // MSC-DAG: @"\01?StaticConstFieldEqualInit@ImportMembers@@2HB" = available_externally dllimport constant i32 1, align 4
   // MSC-DAG: @"\01?StaticConstFieldBraceInit@ImportMembers@@2HB" = available_externally dllimport constant i32 1, align 4
+  // MSC-DAG: @"\01?StaticConstFieldDeclInit@ImportMembers@@2HB"  = available_externally dllimport constant i32 1, align 4
   // MSC-DAG: @"\01?ConstexprField@ImportMembers@@2HB"            = available_externally dllimport constant i32 1, align 4
   // GNU-DAG: @_ZN13ImportMembers11StaticFieldE                   = external dllimport global i32
   // GNU-DAG: @_ZN13ImportMembers16StaticConstFieldE              = external dllimport constant i32
   // GNU-DAG: @_ZN13ImportMembers25StaticConstFieldEqualInitE     = external dllimport constant i32
   // GNU-DAG: @_ZN13ImportMembers25StaticConstFieldBraceInitE     = external dllimport constant i32
+  // GNU-DAG: @_ZN13ImportMembers24StaticConstFieldDeclInitE      = external dllimport constant i32
   // GNU-DAG: @_ZN13ImportMembers14ConstexprFieldE                = external dllimport constant i32
   __declspec(dllimport) static         int  StaticField;
   __declspec(dllimport) static  const  int  StaticConstField;
   __declspec(dllimport) static  const  int  StaticConstFieldEqualInit = 1;
   __declspec(dllimport) static  const  int  StaticConstFieldBraceInit{1};
+  __declspec(dllimport) static  const  int  StaticConstFieldDeclInit = 1;
   __declspec(dllimport) constexpr static int ConstexprField = 1;
 
   template<int Line, typename T> friend void useMemFun();
@@ -230,6 +233,7 @@ USEMV(ImportMembers, StaticField)
 USEMV(ImportMembers, StaticConstField)
 USEMV(ImportMembers, StaticConstFieldEqualInit)
 USEMV(ImportMembers, StaticConstFieldBraceInit)
+USEMV(ImportMembers, StaticConstFieldDeclInit)
 USEMV(ImportMembers, ConstexprField)
 
 
@@ -353,16 +357,19 @@ public:
   // MSC-DAG: @"\01?StaticConstField@Nested@ImportMembers@@2HB"          = external dllimport constant i32
   // MSC-DAG: @"\01?StaticConstFieldEqualInit@Nested@ImportMembers@@2HB" = available_externally dllimport constant i32 1, align 4
   // MSC-DAG: @"\01?StaticConstFieldBraceInit@Nested@ImportMembers@@2HB" = available_externally dllimport constant i32 1, align 4
+  // MSC-DAG: @"\01?StaticConstFieldDeclInit@Nested@ImportMembers@@2HB"  = available_externally dllimport constant i32 1, align 4
   // MSC-DAG: @"\01?ConstexprField@Nested@ImportMembers@@2HB"            = available_externally dllimport constant i32 1, align 4
   // GNU-DAG: @_ZN13ImportMembers6Nested11StaticFieldE                   = external dllimport global i32
   // GNU-DAG: @_ZN13ImportMembers6Nested16StaticConstFieldE              = external dllimport constant i32
   // GNU-DAG: @_ZN13ImportMembers6Nested25StaticConstFieldEqualInitE     = external dllimport constant i32
   // GNU-DAG: @_ZN13ImportMembers6Nested25StaticConstFieldBraceInitE     = external dllimport constant i32
+  // GNU-DAG: @_ZN13ImportMembers6Nested24StaticConstFieldDeclInitE      = external dllimport constant i32
   // GNU-DAG: @_ZN13ImportMembers6Nested14ConstexprFieldE                = external dllimport constant i32
   __declspec(dllimport) static         int  StaticField;
   __declspec(dllimport) static  const  int  StaticConstField;
   __declspec(dllimport) static  const  int  StaticConstFieldEqualInit = 1;
   __declspec(dllimport) static  const  int  StaticConstFieldBraceInit{1};
+  __declspec(dllimport) static  const  int  StaticConstFieldDeclInit = 1;
   __declspec(dllimport) constexpr static int ConstexprField = 1;
 
   template<int Line, typename T> friend void useMemFun();
@@ -403,6 +410,7 @@ USEMV(ImportMembers::Nested, StaticField)
 USEMV(ImportMembers::Nested, StaticConstField)
 USEMV(ImportMembers::Nested, StaticConstFieldEqualInit)
 USEMV(ImportMembers::Nested, StaticConstFieldBraceInit)
+USEMV(ImportMembers::Nested, StaticConstFieldDeclInit)
 USEMV(ImportMembers::Nested, ConstexprField)
 
 

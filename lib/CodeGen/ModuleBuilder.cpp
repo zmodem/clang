@@ -104,6 +104,14 @@ namespace {
         return;
 
       Builder->UpdateCompletedType(D);
+
+      // In C++, we may have data members that need to be emitted at this point.
+      if (Ctx->getLangOpts().CPlusPlus && !D->isDependentContext()) {
+        for (auto *M : D->decls())
+          if (auto *Var = dyn_cast<VarDecl>(M))
+            if (Var->getAnyInitializer() && Var->hasAttr<DLLExportAttr>())
+              Builder->EmitTopLevelDecl(Var);
+      }
     }
 
     void HandleTagDeclRequiredDefinition(const TagDecl *D) override {

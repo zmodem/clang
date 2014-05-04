@@ -1137,6 +1137,24 @@ llvm::Constant *CodeGenModule::GetWeakRefReference(const ValueDecl *VD) {
   return Aliasee;
 }
 
+static bool isVarDeclInlineInitializedStaticDataMember(const VarDecl *VD) {
+  if (!VD->isStaticDataMember())
+    return false;
+  const VarDecl *InitDecl;
+  const Expr *InitExpr = VD->getAnyInitializer(InitDecl);
+  if (!InitExpr)
+    return false;
+  if (InitDecl->isThisDeclarationADefinition())
+    return false;
+  return true;
+}
+
+static bool shouldEmitInlineInitializedStaticDataMember(CGCXXABI &ABI,
+                                                        const VarDecl *VD) {
+  return ABI.isInlineInitializedStaticDataMemberLinkOnce() &&
+         isVarDeclInlineInitializedStaticDataMember(VD);
+}
+
 void CodeGenModule::EmitGlobal(GlobalDecl GD) {
   const auto *Global = cast<ValueDecl>(GD.getDecl());
 
@@ -1187,7 +1205,9 @@ void CodeGenModule::EmitGlobal(GlobalDecl GD) {
     const auto *VD = cast<VarDecl>(Global);
     assert(VD->isFileVarDecl() && "Cannot emit local var decl as global.");
 
-    if (VD->isThisDeclarationADefinition() != VarDecl::Definition)
+    if (VD->isThisDeclarationADefinition() != VarDecl::Definition &&
+        !(VD->hasAttr<DLLExportAttr>() &&
+          shouldEmitInlineInitializedStaticDataMember(getCXXABI(), VD)))
       return;
   }
 
@@ -1525,18 +1545,6 @@ bool CodeGenModule::isTypeConstant(QualType Ty, bool ExcludeCtor) {
   return true;
 }
 
-static bool isVarDeclInlineInitializedStaticDataMember(const VarDecl *VD) {
-  if (!VD->isStaticDataMember())
-    return false;
-  const VarDecl *InitDecl;
-  const Expr *InitExpr = VD->getAnyInitializer(InitDecl);
-  if (!InitExpr)
-    return false;
-  if (InitDecl->isThisDeclarationADefinition())
-    return false;
-  return true;
-}
-
 /// GetOrCreateLLVMGlobal - If the specified mangled name is not in the module,
 /// create and return an llvm GlobalVariable with the specified type.  If there
 /// is something in the module with the specified name, return it potentially
@@ -1599,8 +1607,7 @@ CodeGenModule::GetOrCreateLLVMGlobal(StringRef MangledName,
 
     // If required by the ABI, treat declarations of static data members with
     // inline initializers as definitions.
-    if (getCXXABI().isInlineInitializedStaticDataMemberLinkOnce() &&
-        isVarDeclInlineInitializedStaticDataMember(D))
+    if (shouldEmitInlineInitializedStaticDataMember(getCXXABI(), D))
       EmitGlobalVarDefinition(D);
 
     // Handle XCore specific ABI requirements.
@@ -1966,8 +1973,7 @@ llvm::GlobalValue::LinkageTypes CodeGenModule::getLLVMLinkageForDeclarator(
   // If required by the ABI, give definitions of static data members with inline
   // initializers at least linkonce_odr linkage.
   auto const VD = dyn_cast<VarDecl>(D);
-  if (getCXXABI().isInlineInitializedStaticDataMemberLinkOnce() &&
-      VD && isVarDeclInlineInitializedStaticDataMember(VD)) {
+  if (VD && shouldEmitInlineInitializedStaticDataMember(getCXXABI(), VD)) {
     if (VD->hasAttr<DLLImportAttr>())
       return llvm::GlobalValue::AvailableExternallyLinkage;
     if (VD->hasAttr<DLLExportAttr>())

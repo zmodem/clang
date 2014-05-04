@@ -121,16 +121,19 @@ public:
   // MSC-DAG: @"\01?StaticConstField@ExportMembers@@2HB"          = dllexport constant i32 1, align 4
   // MSC-DAG: @"\01?StaticConstFieldEqualInit@ExportMembers@@2HB" = weak_odr dllexport constant i32 1, align 4
   // MSC-DAG: @"\01?StaticConstFieldBraceInit@ExportMembers@@2HB" = weak_odr dllexport constant i32 1, align 4
+  // MSC-DAG: @"\01?StaticConstFieldDeclInit@ExportMembers@@2HB"  = weak_odr dllexport constant i32 1, align 4
   // MSC-DAG: @"\01?ConstexprField@ExportMembers@@2HB"            = weak_odr dllexport constant i32 1, align 4
   // GNU-DAG: @_ZN13ExportMembers11StaticFieldE                   = dllexport global i32 1, align 4
   // GNU-DAG: @_ZN13ExportMembers16StaticConstFieldE              = dllexport constant i32 1, align 4
   // GNU-DAG: @_ZN13ExportMembers25StaticConstFieldEqualInitE     = dllexport constant i32 1, align 4
   // GNU-DAG: @_ZN13ExportMembers25StaticConstFieldBraceInitE     = dllexport constant i32 1, align 4
+  // mingw32 does not emit StaticConstFieldDeclInit
   // GNU-DAG: @_ZN13ExportMembers14ConstexprFieldE                = dllexport constant i32 1, align 4
   __declspec(dllexport) static         int  StaticField;
   __declspec(dllexport) static  const  int  StaticConstField;
   __declspec(dllexport) static  const  int  StaticConstFieldEqualInit = 1;
   __declspec(dllexport) static  const  int  StaticConstFieldBraceInit{1};
+  __declspec(dllexport) static  const  int  StaticConstFieldDeclInit = 1;
   __declspec(dllexport) constexpr static int ConstexprField = 1;
 };
 
@@ -244,16 +247,19 @@ public:
   // MSC-DAG: @"\01?StaticConstField@Nested@ExportMembers@@2HB"          = dllexport constant i32 1, align 4
   // MSC-DAG: @"\01?StaticConstFieldEqualInit@Nested@ExportMembers@@2HB" = weak_odr dllexport constant i32 1, align 4
   // MSC-DAG: @"\01?StaticConstFieldBraceInit@Nested@ExportMembers@@2HB" = weak_odr dllexport constant i32 1, align 4
+  // MSC-DAG: @"\01?StaticConstFieldDeclInit@Nested@ExportMembers@@2HB"  = weak_odr dllexport constant i32 1, align 4
   // MSC-DAG: @"\01?ConstexprField@Nested@ExportMembers@@2HB"            = weak_odr dllexport constant i32 1, align 4
   // GNU-DAG: @_ZN13ExportMembers6Nested11StaticFieldE                   = dllexport global i32 1, align 4
   // GNU-DAG: @_ZN13ExportMembers6Nested16StaticConstFieldE              = dllexport constant i32 1, align 4
   // GNU-DAG: @_ZN13ExportMembers6Nested25StaticConstFieldEqualInitE     = dllexport constant i32 1, align 4
   // GNU-DAG: @_ZN13ExportMembers6Nested25StaticConstFieldBraceInitE     = dllexport constant i32 1, align 4
+  // mingw32 does not emit StaticConstFieldDeclInit
   // GNU-DAG: @_ZN13ExportMembers6Nested14ConstexprFieldE                = dllexport constant i32 1, align 4
   __declspec(dllexport) static         int  StaticField;
   __declspec(dllexport) static  const  int  StaticConstField;
   __declspec(dllexport) static  const  int  StaticConstFieldEqualInit = 1;
   __declspec(dllexport) static  const  int  StaticConstFieldBraceInit{1};
+  __declspec(dllexport) static  const  int  StaticConstFieldDeclInit = 1;
   __declspec(dllexport) constexpr static int ConstexprField = 1;
 };
 
