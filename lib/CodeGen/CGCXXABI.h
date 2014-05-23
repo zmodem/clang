@@ -382,6 +382,10 @@ public:
   /// class definition should have linkonce linkage.
   virtual bool isInlineInitializedStaticDataMemberLinkOnce() { return false; }
 
+  /// \brief Returns true iff explicit function template specializations
+  /// declared dllimport are treated as inline.
+  virtual bool treatImportedExplicitSpecializationAsInline() { return false; }
+
   /**************************** Array cookies ******************************/
 
   /// Returns the extra size required in order to store the array

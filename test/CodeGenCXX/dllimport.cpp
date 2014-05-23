@@ -411,11 +411,11 @@ USE(importedFuncTmpl<ExplicitInst_Imported>)
 template<> __declspec(dllimport) void importedFuncTmplDecl<ExplicitSpec_Imported>();
 USE(importedFuncTmplDecl<ExplicitSpec_Imported>)
 
-// MSC-DAG-FIXME: declare dllimport void @"\01??$importedFuncTmplDecl@UExplicitSpec_Def_Imported@@@@YAXXZ"()
-// MO1-DAG-FIXME: define available_externally dllimport void @"\01??$importedFuncTmplDecl@UExplicitSpec_Def_Imported@@@@YAXXZ"()
+// MSC-DAG: declare dllimport void @"\01??$importedFuncTmplDecl@UExplicitSpec_Def_Imported@@@@YAXXZ"()
+// MO1-DAG: define available_externally dllimport void @"\01??$importedFuncTmplDecl@UExplicitSpec_Def_Imported@@@@YAXXZ"()
 #ifdef MSABI
-//template<> __declspec(dllimport) void importedFuncTmplDecl<ExplicitSpec_Def_Imported>() {}
-//USE(importedFuncTmplDecl<ExplicitSpec_Def_Imported>)
+template<> __declspec(dllimport) void importedFuncTmplDecl<ExplicitSpec_Def_Imported>() {}
+USE(importedFuncTmplDecl<ExplicitSpec_Def_Imported>)
 #endif
 
 // MSC-DAG: declare dllimport void @"\01??$importedFuncTmplDecl@UExplicitSpec_InlineDef_Imported@@@@YAXXZ"()
@@ -431,11 +431,11 @@ USE(importedFuncTmplDecl<ExplicitSpec_InlineDef_Imported>)
 template<> __declspec(dllimport) void importedFuncTmpl<ExplicitSpec_Imported>();
 USE(importedFuncTmpl<ExplicitSpec_Imported>)
 
-// MSC-DAG-FIXME: declare dllimport void @"\01??$importedFuncTmpl@UExplicitSpec_Def_Imported@@@@YAXXZ"()
-// MO1-DAG-FIXME: define available_externally dllimport void @"\01??$importedFuncTmpl@UExplicitSpec_Def_Imported@@@@YAXXZ"()
+// MSC-DAG: declare dllimport void @"\01??$importedFuncTmpl@UExplicitSpec_Def_Imported@@@@YAXXZ"()
+// MO1-DAG: define available_externally dllimport void @"\01??$importedFuncTmpl@UExplicitSpec_Def_Imported@@@@YAXXZ"()
 #ifdef MSABI
-//template<> __declspec(dllimport) void importedFuncTmpl<ExplicitSpec_Def_Imported>() {}
-//USE(importedFuncTmpl<ExplicitSpec_Def_Imported>)
+template<> __declspec(dllimport) void importedFuncTmpl<ExplicitSpec_Def_Imported>() {}
+USE(importedFuncTmpl<ExplicitSpec_Def_Imported>)
 #endif
 
 // MSC-DAG: declare dllimport void @"\01??$importedFuncTmpl@UExplicitSpec_InlineDef_Imported@@@@YAXXZ"()
@@ -488,11 +488,11 @@ USE(inlineFuncTmpl<ExplicitInst_Imported>)
 template<> __declspec(dllimport) void funcTmpl<ExplicitSpec_Imported>();
 USE(funcTmpl<ExplicitSpec_Imported>)
 
-// MSC-DAG-FIXME: declare dllimport void @"\01??$funcTmpl@UExplicitSpec_Def_Imported@@@@YAXXZ"()
-// MO1-DAG-FIXME: define available_externally dllimport void @"\01??$funcTmpl@UExplicitSpec_Def_Imported@@@@YAXXZ"()
+// MSC-DAG: declare dllimport void @"\01??$funcTmpl@UExplicitSpec_Def_Imported@@@@YAXXZ"()
+// MO1-DAG: define available_externally dllimport void @"\01??$funcTmpl@UExplicitSpec_Def_Imported@@@@YAXXZ"()
 #ifdef MSABI
-//template<> __declspec(dllimport) void funcTmpl<ExplicitSpec_Def_Imported>() {}
-//USE(funcTmpl<ExplicitSpec_Def_Imported>)
+template<> __declspec(dllimport) void funcTmpl<ExplicitSpec_Def_Imported>() {}
+USE(funcTmpl<ExplicitSpec_Def_Imported>)
 #endif
 
 // MSC-DAG: declare dllimport void @"\01??$funcTmpl@UExplicitSpec_InlineDef_Imported@@@@YAXXZ"()

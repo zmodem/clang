@@ -712,11 +712,11 @@ USE(MemFunTmpl::importedStatic<ExplicitInst_Imported>)
 template<> __declspec(dllimport) void MemFunTmpl::importedNormal<ExplicitSpec_Imported>();
 USEMF(MemFunTmpl, importedNormal<ExplicitSpec_Imported>)
 
-// M32-DAG-FIXME: declare dllimport x86_thiscallcc void @"\01??$importedNormal@UExplicitSpec_Def_Imported@@@MemFunTmpl@@QAEXXZ"(%struct.MemFunTmpl*)
-// M64-DAG-FIXME: declare dllimport                void @"\01??$importedNormal@UExplicitSpec_Def_Imported@@@MemFunTmpl@@QEAAXXZ"(%struct.MemFunTmpl*)
+// M32-DAG: declare dllimport x86_thiscallcc void @"\01??$importedNormal@UExplicitSpec_Def_Imported@@@MemFunTmpl@@QAEXXZ"(%struct.MemFunTmpl*)
+// M64-DAG: declare dllimport                void @"\01??$importedNormal@UExplicitSpec_Def_Imported@@@MemFunTmpl@@QEAAXXZ"(%struct.MemFunTmpl*)
 #ifdef MSABI
-//template<> __declspec(dllimport) void MemFunTmpl::importedNormal<ExplicitSpec_Def_Imported>() {}
-//USEMF(MemFunTmpl, importedNormal<ExplicitSpec_Def_Imported>)
+template<> __declspec(dllimport) void MemFunTmpl::importedNormal<ExplicitSpec_Def_Imported>() {}
+USEMF(MemFunTmpl, importedNormal<ExplicitSpec_Def_Imported>)
 #endif
 
 // M32-DAG: declare dllimport x86_thiscallcc void @"\01??$importedNormal@UExplicitSpec_InlineDef_Imported@@@MemFunTmpl@@QAEXXZ"(%struct.MemFunTmpl*)
@@ -732,10 +732,10 @@ USEMF(MemFunTmpl, importedNormal<ExplicitSpec_InlineDef_Imported>)
 template<> __declspec(dllimport) void MemFunTmpl::importedStatic<ExplicitSpec_Imported>();
 USE(MemFunTmpl::importedStatic<ExplicitSpec_Imported>)
 
-// MSC-DAG-FIXME: declare dllimport                void @"\01??$importedStatic@UExplicitSpec_Def_Imported@@@MemFunTmpl@@SAXXZ"()
+// MSC-DAG: declare dllimport                void @"\01??$importedStatic@UExplicitSpec_Def_Imported@@@MemFunTmpl@@SAXXZ"()
 #ifdef MSABI
-//template<> __declspec(dllimport) void MemFunTmpl::importedStatic<ExplicitSpec_Def_Imported>() {}
-//USE(MemFunTmpl::importedStatic<ExplicitSpec_Def_Imported>)
+template<> __declspec(dllimport) void MemFunTmpl::importedStatic<ExplicitSpec_Def_Imported>() {}
+USE(MemFunTmpl::importedStatic<ExplicitSpec_Def_Imported>)
 #endif
 
 // MSC-DAG: declare dllimport                void @"\01??$importedStatic@UExplicitSpec_InlineDef_Imported@@@MemFunTmpl@@SAXXZ"()
@@ -797,11 +797,11 @@ USE(MemFunTmpl::staticDef<ExplicitInst_Imported>)
 template<> __declspec(dllimport) void MemFunTmpl::normalDef<ExplicitSpec_Imported>();
 USEMF(MemFunTmpl, normalDef<ExplicitSpec_Imported>)
 
-// M32-DAG-FIXME: declare dllimport x86_thiscallcc void @"\01??$normalDef@UExplicitSpec_Def_Imported@@@MemFunTmpl@@QAEXXZ"(%struct.MemFunTmpl*)
-// M64-DAG-FIXME: declare dllimport                void @"\01??$normalDef@UExplicitSpec_Def_Imported@@@MemFunTmpl@@QEAAXXZ"(%struct.MemFunTmpl*)
+// M32-DAG: declare dllimport x86_thiscallcc void @"\01??$normalDef@UExplicitSpec_Def_Imported@@@MemFunTmpl@@QAEXXZ"(%struct.MemFunTmpl*)
+// M64-DAG: declare dllimport                void @"\01??$normalDef@UExplicitSpec_Def_Imported@@@MemFunTmpl@@QEAAXXZ"(%struct.MemFunTmpl*)
 #ifdef MSABI
-//template<> __declspec(dllimport) void MemFunTmpl::normalDef<ExplicitSpec_Def_Imported>() {}
-//USEMF(MemFunTmpl, normalDef<ExplicitSpec_Def_Imported>)
+template<> __declspec(dllimport) void MemFunTmpl::normalDef<ExplicitSpec_Def_Imported>() {}
+USEMF(MemFunTmpl, normalDef<ExplicitSpec_Def_Imported>)
 #endif
 
 // M32-DAG: declare dllimport x86_thiscallcc void @"\01??$normalDef@UExplicitSpec_InlineDef_Imported@@@MemFunTmpl@@QAEXXZ"(%struct.MemFunTmpl*)
@@ -817,10 +817,10 @@ USEMF(MemFunTmpl, normalDef<ExplicitSpec_InlineDef_Imported>)
 template<> __declspec(dllimport) void MemFunTmpl::staticDef<ExplicitSpec_Imported>();
 USE(MemFunTmpl::staticDef<ExplicitSpec_Imported>)
 
-// MSC-DAG-FIXME: declare dllimport void @"\01??$staticDef@UExplicitSpec_Def_Imported@@@MemFunTmpl@@SAXXZ"()
+// MSC-DAG: declare dllimport void @"\01??$staticDef@UExplicitSpec_Def_Imported@@@MemFunTmpl@@SAXXZ"()
 #ifdef MSABI
-//template<> __declspec(dllimport) void MemFunTmpl::staticDef<ExplicitSpec_Def_Imported>() {}
-//USE(MemFunTmpl::staticDef<ExplicitSpec_Def_Imported>)
+template<> __declspec(dllimport) void MemFunTmpl::staticDef<ExplicitSpec_Def_Imported>() {}
+USE(MemFunTmpl::staticDef<ExplicitSpec_Def_Imported>)
 #endif
 
 // MSC-DAG: declare dllimport void @"\01??$staticDef@UExplicitSpec_InlineDef_Imported@@@MemFunTmpl@@SAXXZ"()

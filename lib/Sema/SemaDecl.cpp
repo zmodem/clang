@@ -9786,14 +9786,20 @@ Decl *Sema::ActOnStartOfFunctionDef(Scope *FnBodyScope, Decl *D) {
   if (const FunctionProtoType *FPT = FD->getType()->getAs<FunctionProtoType>())
     ResolveExceptionSpec(D->getLocation(), FPT);
 
-  // dllimport cannot be applied to non-inline function definitions.
-  if (FD->hasAttr<DLLImportAttr>() && !FD->isInlined() &&
-      !FD->isTemplateInstantiation()) {
-    assert(!FD->hasAttr<DLLExportAttr>());
-    Diag(FD->getLocation(), diag::err_attribute_dllimport_function_definition);
-    FD->setInvalidDecl();
-    return D;
+  // Checking attributes of current function definition
+  if (const DLLImportAttr *DA = FD->getAttr<DLLImportAttr>()) {
+    // dllimport attribute cannot be directly applied to non-inline function
+    // definitions. MSVC treats explicit specializations as inline.
+    bool TreatAsInline = Context.getTargetInfo().getCXXABI().isMicrosoft() &&
+              FD->getTemplatedKind() != FunctionDecl::TK_MemberSpecialization &&
+              FD->getTemplateSpecializationKind() == TSK_ExplicitSpecialization;
+    if (!DA->isInherited() && !FD->isInlined() && !TreatAsInline &&
+        !FD->isTemplateInstantiation()) {
+      Diag(FD->getLocation(), diag::err_attribute_dllimport_function_definition);
+      FD->setInvalidDecl();
+    }
   }
+
   // We want to attach documentation to original Decl (which might be
   // a function template).
   ActOnDocumentableDecl(D);

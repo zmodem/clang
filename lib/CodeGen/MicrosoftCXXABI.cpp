@@ -52,6 +52,8 @@ public:
 
   bool isInlineInitializedStaticDataMemberLinkOnce() override { return true; }
 
+  bool treatImportedExplicitSpecializationAsInline() override { return true; }
+
   llvm::Value *adjustToCompleteObject(CodeGenFunction &CGF,
                                       llvm::Value *ptr,
                                       QualType type) override;

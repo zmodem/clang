@@ -1,5 +1,5 @@
-// RUN: %clang_cc1 -triple i686-win32     -fsyntax-only -verify -std=c++11 %s
-// RUN: %clang_cc1 -triple x86_64-win32   -fsyntax-only -verify -std=c++1y %s
+// RUN: %clang_cc1 -triple i686-win32     -fsyntax-only -verify -std=c++11 -DMSABI %s
+// RUN: %clang_cc1 -triple x86_64-win32   -fsyntax-only -verify -std=c++1y -DMSABI %s
 // RUN: %clang_cc1 -triple i686-mingw32   -fsyntax-only -verify -std=c++1y %s
 // RUN: %clang_cc1 -triple x86_64-mingw32 -fsyntax-only -verify -std=c++11 %s
 
@@ -329,11 +329,20 @@ extern template void importedFuncTmpl<ExplicitDecl_Imported>();
 // likely a bug because an implicit instantiation is accepted.
 template void importedFuncTmpl<ExplicitInst_Imported>();
 
-// Import specialization of an imported function template. A definition must be
-// declared inline.
+// Import specialization of an imported function template.
+template<> __declspec(dllimport) void importedFuncTmplDecl<ExplicitSpec_Imported>();
+template<> __declspec(dllimport) void importedFuncTmplDecl<ExplicitSpec_Def_Imported>() {} // error on mingw
+template<> __declspec(dllimport) inline void importedFuncTmplDecl<ExplicitSpec_InlineDef_Imported>() {}
+#ifndef MSABI
+// expected-error@-3{{dllimport cannot be applied to non-inline function definition}}
+#endif
+
 template<> __declspec(dllimport) void importedFuncTmpl<ExplicitSpec_Imported>();
-template<> __declspec(dllimport) void importedFuncTmpl<ExplicitSpec_Def_Imported>() {} // expected-error{{dllimport cannot be applied to non-inline function definition}}
+template<> __declspec(dllimport) void importedFuncTmpl<ExplicitSpec_Def_Imported>() {} // error on mingw
 template<> __declspec(dllimport) inline void importedFuncTmpl<ExplicitSpec_InlineDef_Imported>() {}
+#ifndef MSABI
+// expected-error@-3{{dllimport cannot be applied to non-inline function definition}}
+#endif
 
 // Not importing specialization of an imported function template without
 // explicit dllimport.
@@ -348,11 +357,13 @@ extern template __declspec(dllimport) void inlineFuncTmpl<ExplicitDecl_Imported>
 template __declspec(dllimport) void funcTmpl<ExplicitInst_Imported>();
 template __declspec(dllimport) void inlineFuncTmpl<ExplicitInst_Imported>();
 
-// Import specialization of a non-imported function template. A definition must
-// be declared inline.
+// Import specialization of a non-imported function template.
 template<> __declspec(dllimport) void funcTmpl<ExplicitSpec_Imported>();
-template<> __declspec(dllimport) void funcTmpl<ExplicitSpec_Def_Imported>() {} // expected-error{{dllimport cannot be applied to non-inline function definition}}
+template<> __declspec(dllimport) void funcTmpl<ExplicitSpec_Def_Imported>() {} // error on mingw
 template<> __declspec(dllimport) inline void funcTmpl<ExplicitSpec_InlineDef_Imported>() {}
+#ifndef MSABI
+// expected-error@-3{{dllimport cannot be applied to non-inline function definition}}
+#endif
 
 
 

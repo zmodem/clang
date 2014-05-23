@@ -1970,6 +1970,13 @@ llvm::GlobalValue::LinkageTypes CodeGenModule::getLLVMLinkageForDeclarator(
       isVarDeclInlineInitializedStaticDataMember(cast<VarDecl>(D)))
     return llvm::GlobalValue::LinkOnceODRLinkage;
 
+  if (const FunctionDecl *FD = dyn_cast<FunctionDecl>(D)) {
+    if (getCXXABI().treatImportedExplicitSpecializationAsInline() &&
+        FD->getTemplateSpecializationKind() == TSK_ExplicitSpecialization &&
+        FD->hasAttr<DLLImportAttr>())
+      return llvm::GlobalValue::AvailableExternallyLinkage;
+  }
+
   // C++ doesn't have tentative definitions and thus cannot have common
   // linkage.
   if (!getLangOpts().CPlusPlus && isa<VarDecl>(D) &&
