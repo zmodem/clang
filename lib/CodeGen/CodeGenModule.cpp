@@ -1965,10 +1965,15 @@ llvm::GlobalValue::LinkageTypes CodeGenModule::getLLVMLinkageForDeclarator(
 
   // If required by the ABI, give definitions of static data members with inline
   // initializers at least linkonce_odr linkage.
+  auto const VD = dyn_cast<VarDecl>(D);
   if (getCXXABI().isInlineInitializedStaticDataMemberLinkOnce() &&
-      isa<VarDecl>(D) &&
-      isVarDeclInlineInitializedStaticDataMember(cast<VarDecl>(D)))
+      VD && isVarDeclInlineInitializedStaticDataMember(VD)) {
+    if (VD->hasAttr<DLLImportAttr>())
+      return llvm::GlobalValue::AvailableExternallyLinkage;
+    if (VD->hasAttr<DLLExportAttr>())
+      return llvm::GlobalValue::WeakODRLinkage;
     return llvm::GlobalValue::LinkOnceODRLinkage;
+  }
 
   if (const FunctionDecl *FD = dyn_cast<FunctionDecl>(D)) {
     if (getCXXABI().treatImportedExplicitSpecializationAsInline() &&
