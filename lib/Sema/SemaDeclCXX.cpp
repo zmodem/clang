@@ -4355,8 +4355,17 @@ void Sema::checkDLLAttributes(CXXRecordDecl *Record) {
     return;
 
   InheritableAttr* RecordAttr = getDLLAttr(Record);
-  if (!RecordAttr)
+  if (!RecordAttr) {
+    for (CXXMethodDecl *MD : Record->methods()) {
+      // Force definition of explicitly defaulted member functions.
+      if (MD->isExplicitlyDefaulted() && MD->hasAttr<DLLExportAttr>()) {
+        MD->setTrivial(false);
+        MarkFunctionReferenced(MD->getLocation(), MD);
+        ActOnFinishInlineMethodDef(MD);
+      }
+    }
     return;
+  }
 
   // Check member functions and static data members.
   for (Decl *MemberDecl : Record->decls()) {

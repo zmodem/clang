@@ -381,6 +381,54 @@ ExportInlineSpecials::ExportInlineSpecials(const ExportInlineSpecials&) {}
 inline ExportInlineSpecials& ExportInlineSpecials::operator=(const ExportInlineSpecials&) { return *this; }
 
 
+// Export defaulted member functions.
+struct ExportDefaulted {
+  // M32-DAG: define weak_odr dllexport x86_thiscallcc %struct.ExportDefaulted* @"\01??0ExportDefaulted@@QAE@XZ"(%struct.ExportDefaulted* returned %this)
+  // M64-DAG: define weak_odr dllexport                %struct.ExportDefaulted* @"\01??0ExportDefaulted@@QEAA@XZ"(%struct.ExportDefaulted* returned %this)
+  // G32-DAG: define weak_odr dllexport x86_thiscallcc void @_ZN15ExportDefaultedC1Ev(%struct.ExportDefaulted* %this)
+  // G64-DAG: define weak_odr dllexport                void @_ZN15ExportDefaultedC1Ev(%struct.ExportDefaulted* %this)
+  // G32-DAG: define weak_odr dllexport x86_thiscallcc void @_ZN15ExportDefaultedC2Ev(%struct.ExportDefaulted* %this)
+  // G64-DAG: define weak_odr dllexport                void @_ZN15ExportDefaultedC2Ev(%struct.ExportDefaulted* %this)
+  __declspec(dllexport) ExportDefaulted() = default;
+
+  // M32-DAG: define weak_odr dllexport x86_thiscallcc void @"\01??1ExportDefaulted@@QAE@XZ"(%struct.ExportDefaulted* %this)
+  // M64-DAG: define weak_odr dllexport                void @"\01??1ExportDefaulted@@QEAA@XZ"(%struct.ExportDefaulted* %this)
+  // G32-DAG: define weak_odr dllexport x86_thiscallcc void @_ZN15ExportDefaultedD1Ev(%struct.ExportDefaulted* %this)
+  // G64-DAG: define weak_odr dllexport                void @_ZN15ExportDefaultedD1Ev(%struct.ExportDefaulted* %this)
+  // G32-DAG: define weak_odr dllexport x86_thiscallcc void @_ZN15ExportDefaultedD2Ev(%struct.ExportDefaulted* %this)
+  // G64-DAG: define weak_odr dllexport                void @_ZN15ExportDefaultedD2Ev(%struct.ExportDefaulted* %this)
+  __declspec(dllexport) ~ExportDefaulted() = default;
+
+  // M32-DAG: define weak_odr dllexport x86_thiscallcc %struct.ExportDefaulted* @"\01??0ExportDefaulted@@QAE@ABU0@@Z"(%struct.ExportDefaulted* returned %this, %struct.ExportDefaulted*)
+  // M64-DAG: define weak_odr dllexport                %struct.ExportDefaulted* @"\01??0ExportDefaulted@@QEAA@AEBU0@@Z"(%struct.ExportDefaulted* returned %this, %struct.ExportDefaulted*)
+  // G32-DAG: define weak_odr dllexport x86_thiscallcc void @_ZN15ExportDefaultedC1ERKS_(%struct.ExportDefaulted* %this, %struct.ExportDefaulted*)
+  // G64-DAG: define weak_odr dllexport                void @_ZN15ExportDefaultedC1ERKS_(%struct.ExportDefaulted* %this, %struct.ExportDefaulted*)
+  // G32-DAG: define weak_odr dllexport x86_thiscallcc void @_ZN15ExportDefaultedC2ERKS_(%struct.ExportDefaulted* %this, %struct.ExportDefaulted*)
+  // G64-DAG: define weak_odr dllexport                void @_ZN15ExportDefaultedC2ERKS_(%struct.ExportDefaulted* %this, %struct.ExportDefaulted*)
+  __declspec(dllexport) ExportDefaulted(const ExportDefaulted&) = default;
+
+  // M32-DAG: define weak_odr dllexport x86_thiscallcc %struct.ExportDefaulted* @"\01??4ExportDefaulted@@QAEAAU0@ABU0@@Z"(%struct.ExportDefaulted* %this, %struct.ExportDefaulted*)
+  // M64-DAG: define weak_odr dllexport                %struct.ExportDefaulted* @"\01??4ExportDefaulted@@QEAAAEAU0@AEBU0@@Z"(%struct.ExportDefaulted* %this, %struct.ExportDefaulted*)
+  // G32-DAG: define weak_odr dllexport x86_thiscallcc %struct.ExportDefaulted* @_ZN15ExportDefaultedaSERKS_(%struct.ExportDefaulted* %this, %struct.ExportDefaulted*)
+  // G64-DAG: define weak_odr dllexport                %struct.ExportDefaulted* @_ZN15ExportDefaultedaSERKS_(%struct.ExportDefaulted* %this, %struct.ExportDefaulted*)
+  __declspec(dllexport) ExportDefaulted& operator=(const ExportDefaulted&) = default;
+
+  // M32-DAG: define weak_odr dllexport x86_thiscallcc %struct.ExportDefaulted* @"\01??0ExportDefaulted@@QAE@$$QAU0@@Z"(%struct.ExportDefaulted* returned %this, %struct.ExportDefaulted*)
+  // M64-DAG: define weak_odr dllexport                %struct.ExportDefaulted* @"\01??0ExportDefaulted@@QEAA@$$QEAU0@@Z"(%struct.ExportDefaulted* returned %this, %struct.ExportDefaulted*)
+  // G32-DAG: define weak_odr dllexport x86_thiscallcc void @_ZN15ExportDefaultedC1EOS_(%struct.ExportDefaulted* %this, %struct.ExportDefaulted*)
+  // G64-DAG: define weak_odr dllexport                void @_ZN15ExportDefaultedC1EOS_(%struct.ExportDefaulted* %this, %struct.ExportDefaulted*)
+  // G32-DAG: define weak_odr dllexport x86_thiscallcc void @_ZN15ExportDefaultedC2EOS_(%struct.ExportDefaulted* %this, %struct.ExportDefaulted*)
+  // G64-DAG: define weak_odr dllexport                void @_ZN15ExportDefaultedC2EOS_(%struct.ExportDefaulted* %this, %struct.ExportDefaulted*)
+  __declspec(dllexport) ExportDefaulted(ExportDefaulted&&) = default;
+
+  // M32-DAG: define weak_odr dllexport x86_thiscallcc %struct.ExportDefaulted* @"\01??4ExportDefaulted@@QAEAAU0@$$QAU0@@Z"(%struct.ExportDefaulted* %this, %struct.ExportDefaulted*)
+  // M64-DAG: define weak_odr dllexport                %struct.ExportDefaulted* @"\01??4ExportDefaulted@@QEAAAEAU0@$$QEAU0@@Z"(%struct.ExportDefaulted* %this, %struct.ExportDefaulted*)
+  // G32-DAG: define weak_odr dllexport x86_thiscallcc %struct.ExportDefaulted* @_ZN15ExportDefaultedaSEOS_(%struct.ExportDefaulted* %this, %struct.ExportDefaulted*)
+  // G64-DAG: define weak_odr dllexport                %struct.ExportDefaulted* @_ZN15ExportDefaultedaSEOS_(%struct.ExportDefaulted* %this, %struct.ExportDefaulted*)
+  __declspec(dllexport) ExportDefaulted& operator=(ExportDefaulted&&) = default;
+};
+
+
 // Export defaulted member function definitions.
 struct ExportDefaultedDefs {
   __declspec(dllexport) ExportDefaultedDefs();
