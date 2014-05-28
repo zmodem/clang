@@ -1,7 +1,7 @@
-// RUN: %clang_cc1 -triple i686-win32     -fsyntax-only -verify -std=c++11 %s
-// RUN: %clang_cc1 -triple x86_64-win32   -fsyntax-only -verify -std=c++1y %s
-// RUN: %clang_cc1 -triple i686-mingw32   -fsyntax-only -verify -std=c++1y %s
-// RUN: %clang_cc1 -triple x86_64-mingw32 -fsyntax-only -verify -std=c++11 %s
+// RUN: %clang_cc1 -triple i686-win32     -fsyntax-only -verify -std=c++11 -fms-extensions %s
+// RUN: %clang_cc1 -triple x86_64-win32   -fsyntax-only -verify -std=c++1y -fms-extensions %s
+// RUN: %clang_cc1 -triple i686-mingw32   -fsyntax-only -verify -std=c++1y -fms-extensions %s
+// RUN: %clang_cc1 -triple x86_64-mingw32 -fsyntax-only -verify -std=c++11 -fms-extensions %s
 
 // Helper structs to make templates more expressive.
 struct ImplicitInst_Exported {};
@@ -1203,3 +1203,61 @@ template<typename T> template<typename U> __declspec(dllexport)        int  CTMT
 template<typename T> template<typename U> __declspec(dllexport) const  int  CTMTR<T>::StaticConstField = 1;  // expected-error{{redeclaration of 'CTMTR::StaticConstField' cannot add 'dllexport' attribute}}
 template<typename T> template<typename U> __declspec(dllexport) constexpr int CTMTR<T>::ConstexprField;      // expected-error{{redeclaration of 'CTMTR::ConstexprField' cannot add 'dllexport' attribute}}
 #endif // __has_feature(cxx_variable_templates)
+
+
+
+//===----------------------------------------------------------------------===//
+// TLS
+//===----------------------------------------------------------------------===//
+
+// dllexport cannot be thread-local.
+
+// Export TLS globals.
+#if __has_feature(cxx_thread_local)
+__declspec(dllexport) thread_local       int TLSGlobal1; // expected-error{{'dllexport' data cannot be thread-local}}
+#endif
+#if __has_feature(tls)
+__declspec(dllexport) __thread           int TLSGlobal2; // expected-error{{'dllexport' data cannot be thread-local}}
+#endif
+#if __has_attribute(thread)
+__declspec(dllexport) __declspec(thread) int TLSGlobal3; // expected-error{{'dllexport' data cannot be thread-local}}
+#endif
+
+#if __has_feature(cxx_variable_templates)
+// Export TLS variable templates.
+#if __has_feature(cxx_thread_local)
+template<typename T> __declspec(dllexport) thread_local       int TLSVarTmpl1; // expected-error{{'dllexport' data cannot be thread-local}}
+#endif
+#if __has_feature(tls)
+template<typename T> __declspec(dllexport) __thread           int TLSVarTmpl2; // expected-error{{'dllexport' data cannot be thread-local}}
+#endif
+#if __has_attribute(thread)
+template<typename T> __declspec(dllexport) __declspec(thread) int TLSVarTmpl3; // expected-error{{'dllexport' data cannot be thread-local}}
+#endif
+#endif // __has_feature(cxx_variable_templates)
+
+// Export TLS class members.
+struct ExportTLSMembers {
+#if __has_feature(cxx_thread_local)
+  __declspec(dllexport) thread_local       static int TLSField1; // expected-error{{'dllexport' data cannot be thread-local}}
+#endif
+#if __has_feature(tls)
+  __declspec(dllexport) __thread           static int TLSField2; // expected-error{{'dllexport' data cannot be thread-local}}
+#endif
+#if __has_attribute(thread)
+  __declspec(dllexport) __declspec(thread) static int TLSField3; // expected-error{{'dllexport' data cannot be thread-local}}
+#endif
+};
+
+// Export class with TLS members.
+struct __declspec(dllexport) ExportClassTLSMembers {
+#if __has_feature(cxx_thread_local)
+  thread_local       static int TLSField1; // expected-error{{'dllexport' data cannot be thread-local}}
+#endif
+#if __has_feature(tls)
+  __thread           static int TLSField2; // expected-error{{'dllexport' data cannot be thread-local}}
+#endif
+#if __has_attribute(thread)
+  __declspec(thread) static int TLSField3; // expected-error{{'dllexport' data cannot be thread-local}}
+#endif
+};

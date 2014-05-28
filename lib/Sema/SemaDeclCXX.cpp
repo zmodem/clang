@@ -4360,8 +4360,9 @@ void Sema::checkDLLAttributes(CXXRecordDecl *Record) {
 
   // Check member functions and static data members.
   for (Decl *MemberDecl : Record->decls()) {
+    auto *VD = dyn_cast<VarDecl>(MemberDecl);
     auto *MD = dyn_cast<CXXMethodDecl>(MemberDecl);
-    if (!isa<VarDecl>(MemberDecl) && !MD)
+    if (!VD && !MD)
       continue;
     if (MD && isa<CXXDestructorDecl>(MD) && MD->isTrivial())
       continue;
@@ -4372,6 +4373,13 @@ void Sema::checkDLLAttributes(CXXRecordDecl *Record) {
       NewAttr->setInherited(true);
       MemberDecl->addAttr(NewAttr);
     }
+
+    // Static data members cannot be thread-local.
+    // FIXME: This could be relaxed in the future by ignoring the record attr.
+    // MSVC diagnoses this as error.
+    if (VD && VD->getTLSKind() != VarDecl::TLS_None)
+      Diag(VD->getLocation(), diag::err_attribute_dll_thread_local)
+        << RecordAttr;
   }
 }
 

@@ -1,7 +1,7 @@
-// RUN: %clang_cc1 -triple i686-win32     -fsyntax-only -verify -std=c99 %s
-// RUN: %clang_cc1 -triple x86_64-win32   -fsyntax-only -verify -std=c11 %s
-// RUN: %clang_cc1 -triple i686-mingw32   -fsyntax-only -verify -std=c11 %s
-// RUN: %clang_cc1 -triple x86_64-mingw32 -fsyntax-only -verify -std=c99 %s
+// RUN: %clang_cc1 -triple i686-win32     -fsyntax-only -verify -std=c99 -fms-extensions %s
+// RUN: %clang_cc1 -triple x86_64-win32   -fsyntax-only -verify -std=c11 -fms-extensions %s
+// RUN: %clang_cc1 -triple i686-mingw32   -fsyntax-only -verify -std=c11 -fms-extensions %s
+// RUN: %clang_cc1 -triple x86_64-mingw32 -fsyntax-only -verify -std=c99 -fms-extensions %s
 
 // Invalid usage.
 __declspec(dllimport) typedef int typedef1; // expected-warning{{'dllimport' attribute only applies to variables and functions}}
@@ -127,3 +127,22 @@ __declspec(dllimport) inline void redecl6() {} // expected-error{{redeclaration 
 
 // External linkage is required.
 __declspec(dllimport) static int staticFunc(); // expected-error{{'staticFunc' must have external linkage when declared 'dllimport'}}
+
+
+
+//===----------------------------------------------------------------------===//
+// TLS
+//===----------------------------------------------------------------------===//
+
+// dllimport cannot be thread-local.
+
+// Import TLS globals.
+#if __has_feature(c_thread_local)
+__declspec(dllimport) _Thread_local      int TLSGlobal1; // expected-error{{'dllimport' data cannot be thread-local}}
+#endif
+#if __has_feature(tls)
+__declspec(dllimport) __thread           int TLSGlobal2; // expected-error{{'dllimport' data cannot be thread-local}}
+#endif
+#if __has_attribute(thread)
+__declspec(dllimport) __declspec(thread) int TLSGlobal3; // expected-error{{'dllimport' data cannot be thread-local}}
+#endif

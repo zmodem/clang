@@ -9068,6 +9068,12 @@ Sema::FinalizeDeclaration(Decl *ThisDecl) {
     }
   }
 
+  // dllimport/dllexport cannot be thread-local.
+  if (VD->getTLSKind() != VarDecl::TLS_None) {
+    if (const InheritableAttr *DLLAttr = getDLLAttr(VD))
+      Diag(VD->getLocation(), diag::err_attribute_dll_thread_local) << DLLAttr;
+  }
+
   if (UsedAttr *Attr = VD->getAttr<UsedAttr>()) {
     if (!Attr->isInherited() && !VD->isThisDeclarationADefinition()) {
       Diag(Attr->getLocation(), diag::warn_attribute_ignored) << Attr;

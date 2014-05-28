@@ -1,7 +1,7 @@
-// RUN: %clang_cc1 -triple i686-win32     -fsyntax-only -verify -std=c99 %s
-// RUN: %clang_cc1 -triple x86_64-win32   -fsyntax-only -verify -std=c11 %s
-// RUN: %clang_cc1 -triple i686-mingw32   -fsyntax-only -verify -std=c11 %s
-// RUN: %clang_cc1 -triple x86_64-mingw32 -fsyntax-only -verify -std=c99 %s
+// RUN: %clang_cc1 -triple i686-win32     -fsyntax-only -verify -std=c99 -fms-extensions %s
+// RUN: %clang_cc1 -triple x86_64-win32   -fsyntax-only -verify -std=c11 -fms-extensions %s
+// RUN: %clang_cc1 -triple i686-mingw32   -fsyntax-only -verify -std=c11 -fms-extensions %s
+// RUN: %clang_cc1 -triple x86_64-mingw32 -fsyntax-only -verify -std=c99 -fms-extensions %s
 
 // Invalid usage.
 __declspec(dllexport) typedef int typedef1; // expected-warning{{'dllexport' attribute only applies to variables and functions}}
@@ -136,3 +136,22 @@ void __declspec(dllexport) precedenceRedecl1() {}
 
 void __declspec(dllexport) precedenceRedecl2();
 void __declspec(dllimport) precedenceRedecl2() {} // expected-warning{{'dllimport' attribute ignored}}
+
+
+
+//===----------------------------------------------------------------------===//
+// TLS
+//===----------------------------------------------------------------------===//
+
+// dllexport cannot be thread-local.
+
+// Export TLS globals.
+#if __has_feature(c_thread_local)
+__declspec(dllexport) _Thread_local      int TLSGlobal1; // expected-error{{'dllexport' data cannot be thread-local}}
+#endif
+#if __has_feature(tls)
+__declspec(dllexport) __thread           int TLSGlobal2; // expected-error{{'dllexport' data cannot be thread-local}}
+#endif
+#if __has_attribute(thread)
+__declspec(dllexport) __declspec(thread) int TLSGlobal3; // expected-error{{'dllexport' data cannot be thread-local}}
+#endif

@@ -1,7 +1,7 @@
-// RUN: %clang_cc1 -triple i686-win32     -fsyntax-only -verify -std=c++11 -DMSABI %s
-// RUN: %clang_cc1 -triple x86_64-win32   -fsyntax-only -verify -std=c++1y -DMSABI %s
-// RUN: %clang_cc1 -triple i686-mingw32   -fsyntax-only -verify -std=c++1y %s
-// RUN: %clang_cc1 -triple x86_64-mingw32 -fsyntax-only -verify -std=c++11 %s
+// RUN: %clang_cc1 -triple i686-win32     -fsyntax-only -verify -std=c++11 -fms-extensions -DMSABI %s
+// RUN: %clang_cc1 -triple x86_64-win32   -fsyntax-only -verify -std=c++1y -fms-extensions -DMSABI %s
+// RUN: %clang_cc1 -triple i686-mingw32   -fsyntax-only -verify -std=c++1y -fms-extensions %s
+// RUN: %clang_cc1 -triple x86_64-mingw32 -fsyntax-only -verify -std=c++11 -fms-extensions %s
 
 // Helper structs to make templates more expressive.
 struct ImplicitInst_Imported {};
@@ -1253,3 +1253,61 @@ template<typename T> template<typename U> __declspec(dllimport) constexpr int CT
                                                                                                              // expected-error@-1{{definition of dllimport static field not allowed}}
                                                                                                              // expected-note@-2{{attribute is here}}
 #endif // __has_feature(cxx_variable_templates)
+
+
+
+//===----------------------------------------------------------------------===//
+// TLS
+//===----------------------------------------------------------------------===//
+
+// dllimport cannot be thread-local.
+
+// Import TLS globals.
+#if __has_feature(cxx_thread_local)
+__declspec(dllimport) thread_local       int TLSGlobal1; // expected-error{{'dllimport' data cannot be thread-local}}
+#endif
+#if __has_feature(tls)
+__declspec(dllimport) __thread           int TLSGlobal2; // expected-error{{'dllimport' data cannot be thread-local}}
+#endif
+#if __has_attribute(thread)
+__declspec(dllimport) __declspec(thread) int TLSGlobal3; // expected-error{{'dllimport' data cannot be thread-local}}
+#endif
+
+#if __has_feature(cxx_variable_templates)
+// Import TLS variable templates.
+#if __has_feature(cxx_thread_local)
+template<typename T> __declspec(dllimport) thread_local       int TLSVarTmpl1; // expected-error{{'dllimport' data cannot be thread-local}}
+#endif
+#if __has_feature(tls)
+template<typename T> __declspec(dllimport) __thread           int TLSVarTmpl2; // expected-error{{'dllimport' data cannot be thread-local}}
+#endif
+#if __has_attribute(thread)
+template<typename T> __declspec(dllimport) __declspec(thread) int TLSVarTmpl3; // expected-error{{'dllimport' data cannot be thread-local}}
+#endif
+#endif // __has_feature(cxx_variable_templates)
+
+// Import TLS class members.
+struct ImportTLSMembers {
+#if __has_feature(cxx_thread_local)
+  __declspec(dllimport) thread_local       static int TLSField1; // expected-error{{'dllimport' data cannot be thread-local}}
+#endif
+#if __has_feature(tls)
+  __declspec(dllimport) __thread           static int TLSField2; // expected-error{{'dllimport' data cannot be thread-local}}
+#endif
+#if __has_attribute(thread)
+  __declspec(dllimport) __declspec(thread) static int TLSField3; // expected-error{{'dllimport' data cannot be thread-local}}
+#endif
+};
+
+// Import class with TLS members.
+struct __declspec(dllimport) ExportClassTLSMembers {
+#if __has_feature(cxx_thread_local)
+  thread_local       static int TLSField1; // expected-error{{'dllimport' data cannot be thread-local}}
+#endif
+#if __has_feature(tls)
+  __thread           static int TLSField2; // expected-error{{'dllimport' data cannot be thread-local}}
+#endif
+#if __has_attribute(thread)
+  __declspec(thread) static int TLSField3; // expected-error{{'dllimport' data cannot be thread-local}}
+#endif
+};

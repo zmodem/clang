@@ -2095,6 +2095,8 @@ def err_attribute_dllimport_function_definition : Error<
   "dllimport cannot be applied to non-inline function definition">;
 def err_attribute_dll_deleted : Error<
   "attempt to delete %q0 function">;
+def err_attribute_dll_thread_local : Error<
+  "%q0 data cannot be thread-local">;
 def err_attribute_dllimport_data_definition : Error<
   "definition of dllimport data">;
 def err_attribute_dllimport_static_field_definition : Error<
