@@ -4962,6 +4962,8 @@ public:
                                                    const FunctionProtoType *T);
   void CheckDelayedMemberExceptionSpecs();
 
+  void checkDLLAttributes(CXXRecordDecl *Record);
+
   //===--------------------------------------------------------------------===//
   // C++ Derived Classes
   //

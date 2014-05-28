@@ -4348,6 +4348,33 @@ static void CheckAbstractClassUsage(AbstractUsageInfo &Info,
   }
 }
 
+/// \brief Performs semantic checks for records with dllimport or dllexport
+/// attributes.
+void Sema::checkDLLAttributes(CXXRecordDecl *Record) {
+  if (!Record)
+    return;
+
+  InheritableAttr* RecordAttr = getDLLAttr(Record);
+  if (!RecordAttr)
+    return;
+
+  // Check member functions and static data members.
+  for (Decl *MemberDecl : Record->decls()) {
+    auto *MD = dyn_cast<CXXMethodDecl>(MemberDecl);
+    if (!isa<VarDecl>(MemberDecl) && !MD)
+      continue;
+    if (MD && isa<CXXDestructorDecl>(MD) && MD->isTrivial())
+      continue;
+
+    // Let the member inherit the record's attribute.
+    if (!getDLLAttr(MemberDecl)) {
+      auto *NewAttr = cast<InheritableAttr>(RecordAttr->clone(getASTContext()));
+      NewAttr->setInherited(true);
+      MemberDecl->addAttr(NewAttr);
+    }
+  }
+}
+
 /// \brief Perform semantic checks on a class definition that has been
 /// completing, introducing implicitly-declared members, checking for
 /// abstract types, etc.
@@ -4512,6 +4539,8 @@ void Sema::CheckCompletedCXXClass(CXXRecordDecl *Record) {
   //   instantiated (e.g. meta-functions). This doesn't apply to classes that
   //   have inheriting constructors.
   DeclareInheritingConstructors(Record);
+
+  checkDLLAttributes(Record);
 }
 
 /// Look up the special member function that would be called by a special
