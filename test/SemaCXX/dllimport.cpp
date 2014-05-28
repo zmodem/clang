@@ -11,17 +11,18 @@ struct ExplicitSpec_Imported {};
 struct ExplicitSpec_Def_Imported {};
 struct ExplicitSpec_InlineDef_Imported {};
 struct ExplicitSpec_NotImported {};
+struct MemberSpec_Imported;
 namespace { struct Internal {}; }
 
 
 // Invalid usage.
-__declspec(dllimport) typedef int typedef1; // expected-warning{{'dllimport' attribute only applies to variables and functions}}
-typedef __declspec(dllimport) int typedef2; // expected-warning{{'dllimport' attribute only applies to variables and functions}}
-typedef int __declspec(dllimport) typedef3; // expected-warning{{'dllimport' attribute only applies to variables and functions}}
-typedef __declspec(dllimport) void (*FunTy)(); // expected-warning{{'dllimport' attribute only applies to variables and functions}}
-enum __declspec(dllimport) Enum {}; // expected-warning{{'dllimport' attribute only applies to variables and functions}}
+__declspec(dllimport) typedef int typedef1; // expected-warning{{'dllimport' attribute only applies to variables, functions and classes}}
+typedef __declspec(dllimport) int typedef2; // expected-warning{{'dllimport' attribute only applies to variables, functions and classes}}
+typedef int __declspec(dllimport) typedef3; // expected-warning{{'dllimport' attribute only applies to variables, functions and classes}}
+typedef __declspec(dllimport) void (*FunTy)(); // expected-warning{{'dllimport' attribute only applies to variables, functions and classes}}
+enum __declspec(dllimport) Enum {}; // expected-warning{{'dllimport' attribute only applies to variables, functions and classes}}
 #if __has_feature(cxx_strong_enums)
-  enum class __declspec(dllimport) EnumClass {}; // expected-warning{{'dllimport' attribute only applies to variables and functions}}
+  enum class __declspec(dllimport) EnumClass {}; // expected-warning{{'dllimport' attribute only applies to variables, functions and classes}}
 #endif
 
 
@@ -407,7 +408,7 @@ private:
   __declspec(dllimport)                void privateDecl();
 public:
 
-  __declspec(dllimport)                int  Field; // expected-warning{{'dllimport' attribute only applies to variables and functions}}
+  __declspec(dllimport)                int  Field; // expected-warning{{'dllimport' attribute only applies to variables, functions and classes}}
   __declspec(dllimport) static         int  StaticField;
   __declspec(dllimport) static         int  StaticFieldDef; // expected-note{{attribute is here}}
   __declspec(dllimport) static  const  int  StaticConstField;
@@ -777,6 +778,302 @@ template<> __declspec(dllimport) const int MemVarTmpl::StaticVar<ExplicitSpec_De
 
 
 //===----------------------------------------------------------------------===//
+// Classes
+//===----------------------------------------------------------------------===//
+
+// Import whole class.
+struct __declspec(dllimport) ImportClass { // expected-note 3{{previous attribute is here}} expected-note 3{{attribute is here}}
+  struct Nested {
+    void normal() {}
+  };
+  struct __declspec(dllexport) NestedExportClass {
+    void normal() {}
+  };
+  struct NestedExportMembers {
+    __declspec(dllexport) void normal() {}
+  };
+  struct __declspec(dllimport) NestedImportClass {
+    void normal();
+  };
+  struct NestedImportMembers {
+    __declspec(dllimport) void normal();
+  };
+
+                 void normalDecl();
+                 void normalDef(); // expected-note{{previous declaration is here}}
+                 void normalInclass() {}
+                 void normalInlineDef();
+          inline void normalInlineDecl();
+  virtual        void virtualDecl();
+  virtual        void virtualDef(); // expected-note{{previous declaration is here}}
+  virtual        void virtualInclass() {}
+  virtual        void virtualInlineDef();
+  virtual inline void virtualInlineDecl();
+  static         void staticDecl();
+  static         void staticDef(); // expected-note{{previous declaration is here}}
+  static         void staticInclass() {}
+  static         void staticInlineDef();
+  static  inline void staticInlineDecl();
+
+protected:
+                 void protectedDecl();
+private:
+                 void privateDecl();
+public:
+
+                 int  Field;
+  static         int  StaticField;
+  static         int  StaticFieldDef;
+  static  const  int  StaticConstField;
+  static  const  int  StaticConstFieldDef;
+  static  const  int  StaticConstFieldEqualInit = 1;
+  static  const  int  StaticConstFieldBraceInit{1};
+  constexpr static int ConstexprField = 1;
+  constexpr static int ConstexprFieldDef = 1;
+};
+
+       void ImportClass::normalDef() {} // expected-warning{{'ImportClass::normalDef' redeclared without 'dllimport' attribute: previous 'dllimport' ignored}}
+inline void ImportClass::normalInlineDef() {}
+       void ImportClass::normalInlineDecl() {}
+       void ImportClass::virtualDef() {} // expected-warning{{'ImportClass::virtualDef' redeclared without 'dllimport' attribute: previous 'dllimport' ignored}}
+inline void ImportClass::virtualInlineDef() {}
+       void ImportClass::virtualInlineDecl() {}
+       void ImportClass::staticDef() {} // expected-warning{{'ImportClass::staticDef' redeclared without 'dllimport' attribute: previous 'dllimport' ignored}}
+inline void ImportClass::staticInlineDef() {}
+       void ImportClass::staticInlineDecl() {}
+
+       int  ImportClass::StaticFieldDef; // expected-error{{definition of dllimport static field not allowed}}
+const  int  ImportClass::StaticConstFieldDef = 1; // expected-error{{definition of dllimport static field not allowed}}
+constexpr int ImportClass::ConstexprFieldDef; // expected-error{{definition of dllimport static field not allowed}}
+
+
+// Import class with deleted member functions.
+struct __declspec(dllimport) ImportClassDeleted {
+  ImportClassDeleted() = delete;
+  ~ImportClassDeleted() = delete;
+  ImportClassDeleted(const ImportClassDeleted&) = delete;
+  ImportClassDeleted& operator=(const ImportClassDeleted&) = delete;
+  ImportClassDeleted(ImportClassDeleted&&) = delete;
+  ImportClassDeleted& operator=(ImportClassDeleted&&) = delete;
+  void deleted() = delete;
+};
+
+
+// Import class with defaulted member functions.
+struct __declspec(dllimport) ImportClassDefaulted {
+  ImportClassDefaulted() = default;
+  ~ImportClassDefaulted() = default;
+  ImportClassDefaulted(const ImportClassDefaulted&) = default;
+  ImportClassDefaulted& operator=(const ImportClassDefaulted&) = default;
+  ImportClassDefaulted(ImportClassDefaulted&&) = default;
+  ImportClassDefaulted& operator=(ImportClassDefaulted&&) = default;
+};
+
+
+// Import class with defaulted member function definitions.
+struct __declspec(dllimport) ImportClassDefaultedDefs { // expected-note 4{{previous attribute is here}}
+  ImportClassDefaultedDefs(); // expected-note{{previous declaration is here}}
+  ~ImportClassDefaultedDefs(); // expected-note{{previous declaration is here}}
+
+  inline ImportClassDefaultedDefs(const ImportClassDefaultedDefs&);
+  ImportClassDefaultedDefs& operator=(const ImportClassDefaultedDefs&);
+
+  ImportClassDefaultedDefs(ImportClassDefaultedDefs&&); // expected-note{{previous declaration is here}}
+  ImportClassDefaultedDefs& operator=(ImportClassDefaultedDefs&&); // expected-note{{previous declaration is here}}
+};
+
+// dllimport cannot be dropped.
+ImportClassDefaultedDefs::ImportClassDefaultedDefs() = default; // expected-warning{{'ImportClassDefaultedDefs::ImportClassDefaultedDefs' redeclared without 'dllimport' attribute: previous 'dllimport' ignored}}
+ImportClassDefaultedDefs::~ImportClassDefaultedDefs() = default; // expected-warning{{'ImportClassDefaultedDefs::~ImportClassDefaultedDefs' redeclared without 'dllimport' attribute: previous 'dllimport' ignored}}
+
+// Import inline declaration and definition.
+ImportClassDefaultedDefs::ImportClassDefaultedDefs(const ImportClassDefaultedDefs&) = default;
+inline ImportClassDefaultedDefs& ImportClassDefaultedDefs::operator=(const ImportClassDefaultedDefs&) = default;
+
+ImportClassDefaultedDefs::ImportClassDefaultedDefs(ImportClassDefaultedDefs&&) = default; // expected-warning{{'ImportClassDefaultedDefs::ImportClassDefaultedDefs' redeclared without 'dllimport' attribute: previous 'dllimport' ignored}}
+ImportClassDefaultedDefs& ImportClassDefaultedDefs::operator=(ImportClassDefaultedDefs&&) = default; // expected-warning{{'ImportClassDefaultedDefs::operator=' redeclared without 'dllimport' attribute: previous 'dllimport' ignored}}
+
+
+
+//===----------------------------------------------------------------------===//
+// Class templates
+//===----------------------------------------------------------------------===//
+
+// Import whole class template.
+template<typename T>
+struct __declspec(dllimport) ImportClassTmpl { // expected-note 3{{previous attribute is here}} expected-note 3{{attribute is here}}
+                 void normalDecl();
+                 void normalDef(); // expected-note{{previous declaration is here}}
+                 void normalInclass() {}
+                 void normalInlineDef();
+          inline void normalInlineDecl();
+  virtual        void virtualDecl();
+  virtual        void virtualDef(); // expected-note{{previous declaration is here}}
+  virtual        void virtualInclass() {}
+  virtual        void virtualInlineDef();
+  virtual inline void virtualInlineDecl();
+  static         void staticDecl();
+  static         void staticDef(); // expected-note{{previous declaration is here}}
+  static         void staticInclass() {}
+  static         void staticInlineDef();
+  static  inline void staticInlineDecl();
+
+protected:
+                 void protectedDecl();
+private:
+                 void privateDecl();
+public:
+
+                 int  Field;
+  static         int  StaticField;
+  static         int  StaticFieldDef;
+  static  const  int  StaticConstField;
+  static  const  int  StaticConstFieldDef;
+  static  const  int  StaticConstFieldEqualInit = 1;
+  static  const  int  StaticConstFieldBraceInit{1};
+  constexpr static int ConstexprField = 1;
+  constexpr static int ConstexprFieldDef = 1;
+};
+
+// NB: MSVC is inconsistent here and disallows *InlineDef on class templates,
+// but allows it on classes. We allow both.
+template<typename T>        void ImportClassTmpl<T>::normalDef() {} // expected-warning{{'ImportClassTmpl::normalDef' redeclared without 'dllimport' attribute: previous 'dllimport' ignored}}
+template<typename T> inline void ImportClassTmpl<T>::normalInlineDef() {}
+template<typename T>        void ImportClassTmpl<T>::normalInlineDecl() {}
+template<typename T>        void ImportClassTmpl<T>::virtualDef() {} // expected-warning{{'ImportClassTmpl::virtualDef' redeclared without 'dllimport' attribute: previous 'dllimport' ignored}}
+template<typename T> inline void ImportClassTmpl<T>::virtualInlineDef() {}
+template<typename T>        void ImportClassTmpl<T>::virtualInlineDecl() {}
+template<typename T>        void ImportClassTmpl<T>::staticDef() {} // expected-warning{{'ImportClassTmpl::staticDef' redeclared without 'dllimport' attribute: previous 'dllimport' ignored}}
+template<typename T> inline void ImportClassTmpl<T>::staticInlineDef() {}
+template<typename T>        void ImportClassTmpl<T>::staticInlineDecl() {}
+
+template<typename T>        int  ImportClassTmpl<T>::StaticFieldDef; // expected-error{{definition of dllimport static field not allowed}}
+template<typename T> const  int  ImportClassTmpl<T>::StaticConstFieldDef = 1; // expected-error{{definition of dllimport static field not allowed}}
+template<typename T> constexpr int ImportClassTmpl<T>::ConstexprFieldDef; // expected-error{{definition of dllimport static field not allowed}}
+
+
+// A non-exported class template.
+template<typename T>
+struct ClassTmpl {
+                 void normalDecl();
+                 void normalDef();
+                 void normalInclass() {}
+                 void normalInlineDef();
+          inline void normalInlineDecl();
+  virtual        void virtualDecl();
+  virtual        void virtualDef();
+  virtual        void virtualInclass() {}
+  virtual        void virtualInlineDef();
+  virtual inline void virtualInlineDecl();
+  static         void staticDecl();
+  static         void staticDef();
+  static         void staticInclass() {}
+  static         void staticInlineDef();
+  static  inline void staticInlineDecl();
+
+protected:
+                 void protectedDecl();
+private:
+                 void privateDecl();
+public:
+
+                 int  Field;
+  static         int  StaticField;
+  static         int  StaticFieldDef;
+  static  const  int  StaticConstField;
+  static  const  int  StaticConstFieldDef;
+  static  const  int  StaticConstFieldEqualInit = 1;
+  static  const  int  StaticConstFieldBraceInit{1};
+  constexpr static int ConstexprField = 1;
+  constexpr static int ConstexprFieldDef = 1;
+};
+
+// NB: We follow MSVC here and ignore all illegal definitions when explicitly
+// importing an explicit instantiation. FIXME: Check comment.
+template<typename T>        void ClassTmpl<T>::normalDef() {}
+template<typename T> inline void ClassTmpl<T>::normalInlineDef() {}
+template<typename T>        void ClassTmpl<T>::normalInlineDecl() {}
+template<typename T>        void ClassTmpl<T>::virtualDef() {}
+template<typename T> inline void ClassTmpl<T>::virtualInlineDef() {}
+template<typename T>        void ClassTmpl<T>::virtualInlineDecl() {}
+template<typename T>        void ClassTmpl<T>::staticDef() {}
+template<typename T> inline void ClassTmpl<T>::staticInlineDef() {}
+template<typename T>        void ClassTmpl<T>::staticInlineDecl() {}
+
+template<typename T>        int  ClassTmpl<T>::StaticFieldDef;
+template<typename T> const  int  ClassTmpl<T>::StaticConstFieldDef = 1;
+template<typename T> constexpr int ClassTmpl<T>::ConstexprFieldDef;
+
+
+// Import implicit instantiation of an imported class template.
+ImportClassTmpl<ImplicitInst_Imported> ImplicitInst;
+
+// Import explicit instantiation declaration of an imported class template.
+extern template struct ImportClassTmpl<ExplicitDecl_Imported>;
+
+// Import explicit instantiation definition of an imported class template.
+template struct ImportClassTmpl<ExplicitInst_Imported>;
+
+// Import specialization of an imported class template.
+template<>
+struct __declspec(dllimport) ImportClassTmpl<ExplicitSpec_Imported> {
+  void normal() {}
+};
+
+// Not importing specialization of an imported class template without explicit
+// dllimport.
+template<>
+struct ImportClassTmpl<ExplicitSpec_NotImported> {
+  void normal() {}
+};
+
+
+// Import explicit instantiation declaration of a non-imported class template.
+extern template struct __declspec(dllimport) ClassTmpl<ExplicitDecl_Imported>;
+
+// Import explicit instantiation definition of a non-imported class template.
+template struct __declspec(dllimport) ClassTmpl<ExplicitInst_Imported>;
+
+// Import specialization of a non-imported class template.
+template<>
+struct __declspec(dllimport) ClassTmpl<ExplicitSpec_Imported> {
+  void normal() {}
+};
+
+// Not importing specialization of a non-imported class template without
+// explicit dllimport.
+template<>
+struct ClassTmpl<ExplicitSpec_NotImported> {
+  void normal() {}
+};
+
+
+// Import member specializations.
+// NB: C++ [temp.expl.spec]p12
+//   An explicit specialization [...] is inline only if it is declared with the
+//   inline specifier [...].
+// MSVC violates this rule and makes *InlineDecl inline.
+template<> __declspec(dllimport)        void ClassTmpl<MemberSpec_Imported>::normalDef() {}         // expected-error{{dllimport cannot be applied to non-inline function definition}}
+template<> __declspec(dllimport) inline void ClassTmpl<MemberSpec_Imported>::normalInlineDef() {}
+template<> __declspec(dllimport)        void ClassTmpl<MemberSpec_Imported>::normalInlineDecl() {}  // expected-error{{dllimport cannot be applied to non-inline function definition}}
+template<> __declspec(dllimport)        void ClassTmpl<MemberSpec_Imported>::virtualDef() {}        // expected-error{{dllimport cannot be applied to non-inline function definition}}
+template<> __declspec(dllimport) inline void ClassTmpl<MemberSpec_Imported>::virtualInlineDef() {}
+template<> __declspec(dllimport)        void ClassTmpl<MemberSpec_Imported>::virtualInlineDecl() {} // expected-error{{dllimport cannot be applied to non-inline function definition}}
+template<> __declspec(dllimport)        void ClassTmpl<MemberSpec_Imported>::staticDef() {}         // expected-error{{dllimport cannot be applied to non-inline function definition}}
+template<> __declspec(dllimport) inline void ClassTmpl<MemberSpec_Imported>::staticInlineDef() {}
+template<> __declspec(dllimport)        void ClassTmpl<MemberSpec_Imported>::staticInlineDecl() {}  // expected-error{{dllimport cannot be applied to non-inline function definition}}
+
+template<> __declspec(dllimport)        int  ClassTmpl<MemberSpec_Imported>::StaticFieldDef;
+template<> __declspec(dllimport) const  int  ClassTmpl<MemberSpec_Imported>::StaticConstFieldDef = 1; // expected-error{{definition of dllimport static field not allowed}}
+                                                                                                      // expected-note@-1{{attribute is here}}
+// FIXME: Clang erroneously diagnoses this definition which seems to be a bug.
+// There should be no diagnostic here.
+// expected-error@+1{{declaration of constexpr static data member 'ConstexprFieldDef' requires an initializer}}
+template<> __declspec(dllimport) constexpr int ClassTmpl<MemberSpec_Imported>::ConstexprFieldDef;
+
+
+
+//===----------------------------------------------------------------------===//
 // Class template members
 //===----------------------------------------------------------------------===//
 
@@ -805,7 +1102,7 @@ private:
   __declspec(dllimport)                void privateDecl();
 public:
 
-  __declspec(dllimport)                int  Field; // expected-warning{{'dllimport' attribute only applies to variables and functions}}
+  __declspec(dllimport)                int  Field; // expected-warning{{'dllimport' attribute only applies to variables, functions and classes}}
   __declspec(dllimport) static         int  StaticField;
   __declspec(dllimport) static         int  StaticFieldDef; // expected-note{{attribute is here}}
   __declspec(dllimport) static  const  int  StaticConstField;

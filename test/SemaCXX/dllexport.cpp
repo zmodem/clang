@@ -11,18 +11,19 @@ struct ExplicitSpec_Exported {};
 struct ExplicitSpec_Def_Exported {};
 struct ExplicitSpec_InlineDef_Exported {};
 struct ExplicitSpec_NotExported {};
+struct MemberSpec_Exported;
 namespace { struct Internal {}; }
 struct External { int v; };
 
 
 // Invalid usage.
-__declspec(dllexport) typedef int typedef1; // expected-warning{{'dllexport' attribute only applies to variables and functions}}
-typedef __declspec(dllexport) int typedef2; // expected-warning{{'dllexport' attribute only applies to variables and functions}}
-typedef int __declspec(dllexport) typedef3; // expected-warning{{'dllexport' attribute only applies to variables and functions}}
-typedef __declspec(dllexport) void (*FunTy)(); // expected-warning{{'dllexport' attribute only applies to variables and functions}}
-enum __declspec(dllexport) Enum {}; // expected-warning{{'dllexport' attribute only applies to variables and functions}}
+__declspec(dllexport) typedef int typedef1; // expected-warning{{'dllexport' attribute only applies to variables, functions and classes}}
+typedef __declspec(dllexport) int typedef2; // expected-warning{{'dllexport' attribute only applies to variables, functions and classes}}
+typedef int __declspec(dllexport) typedef3; // expected-warning{{'dllexport' attribute only applies to variables, functions and classes}}
+typedef __declspec(dllexport) void (*FunTy)(); // expected-warning{{'dllexport' attribute only applies to variables, functions and classes}}
+enum __declspec(dllexport) Enum {}; // expected-warning{{'dllexport' attribute only applies to variables, functions and classes}}
 #if __has_feature(cxx_strong_enums)
-  enum class __declspec(dllexport) EnumClass {}; // expected-warning{{'dllexport' attribute only applies to variables and functions}}
+  enum class __declspec(dllexport) EnumClass {}; // expected-warning{{'dllexport' attribute only applies to variables, functions and classes}}
 #endif
 
 
@@ -385,7 +386,7 @@ private:
   __declspec(dllexport)                void privateDef();
 public:
 
-  __declspec(dllexport)                int  Field; // expected-warning{{'dllexport' attribute only applies to variables and functions}}
+  __declspec(dllexport)                int  Field; // expected-warning{{'dllexport' attribute only applies to variables, functions and classes}}
   __declspec(dllexport) static         int  StaticField;
   __declspec(dllexport) static         int  StaticFieldDef;
   __declspec(dllexport) static  const  int  StaticConstField;
@@ -743,6 +744,301 @@ template<> __declspec(dllexport) const int MemVarTmpl::StaticVar<ExplicitSpec_De
 
 
 //===----------------------------------------------------------------------===//
+// Classes
+//===----------------------------------------------------------------------===//
+
+// Export whole class.
+struct __declspec(dllexport) ExportClass {
+  struct Nested {
+    void normal() {}
+  };
+  struct __declspec(dllexport) NestedExportClass {
+    void normal() {}
+  };
+  struct NestedExportMembers {
+    __declspec(dllexport) void normal() {}
+  };
+  struct __declspec(dllimport) NestedImportClass {
+    void normal();
+  };
+  struct NestedImportMembers {
+    __declspec(dllimport) void normal();
+  };
+
+                 void normalDecl();
+                 void normalDef();
+                 void normalInclass() {}
+                 void normalInlineDef();
+          inline void normalInlineDecl();
+  virtual        void virtualDecl();
+  virtual        void virtualDef();
+  virtual        void virtualInclass() {}
+  virtual        void virtualInlineDef();
+  virtual inline void virtualInlineDecl();
+  static         void staticDecl();
+  static         void staticDef();
+  static         void staticInclass() {}
+  static         void staticInlineDef();
+  static  inline void staticInlineDecl();
+
+protected:
+                 void protectedDef();
+private:
+                 void privateDef();
+public:
+
+                 int  Field;
+  static         int  StaticField;
+  static         int  StaticFieldDef;
+  static  const  int  StaticConstField;
+  static  const  int  StaticConstFieldDef;
+  static  const  int  StaticConstFieldEqualInit = 1;
+  static  const  int  StaticConstFieldBraceInit{1};
+  constexpr static int ConstexprField = 1;
+  constexpr static int ConstexprFieldDef = 1;
+};
+
+       void ExportClass::normalDef() {}
+inline void ExportClass::normalInlineDef() {}
+       void ExportClass::normalInlineDecl() {}
+       void ExportClass::virtualDef() {}
+inline void ExportClass::virtualInlineDef() {}
+       void ExportClass::virtualInlineDecl() {}
+       void ExportClass::staticDef() {}
+inline void ExportClass::staticInlineDef() {}
+       void ExportClass::staticInlineDecl() {}
+       void ExportClass::protectedDef() {}
+       void ExportClass::privateDef() {}
+
+       int  ExportClass::StaticFieldDef;
+const  int  ExportClass::StaticConstFieldDef = 1;
+constexpr int ExportClass::ConstexprFieldDef;
+
+
+// Export class with deleted member functions.
+struct __declspec(dllexport) ExportClassDeleted {
+  ExportClassDeleted() = delete;
+  ~ExportClassDeleted() = delete;
+  ExportClassDeleted(const ExportClassDeleted&) = delete;
+  ExportClassDeleted& operator=(const ExportClassDeleted&) = delete;
+  ExportClassDeleted(ExportClassDeleted&&) = delete;
+  ExportClassDeleted& operator=(ExportClassDeleted&&) = delete;
+  void deleted() = delete;
+};
+
+
+// Export class with defaulted member functions.
+struct __declspec(dllexport) ExportClassDefaulted {
+  ExportClassDefaulted() = default;
+  ~ExportClassDefaulted() = default;
+  ExportClassDefaulted(const ExportClassDefaulted&) = default;
+  ExportClassDefaulted& operator=(const ExportClassDefaulted&) = default;
+  ExportClassDefaulted(ExportClassDefaulted&&) = default;
+  ExportClassDefaulted& operator=(ExportClassDefaulted&&) = default;
+};
+
+
+// Export class with defaulted member function definitions.
+struct __declspec(dllexport) ExportClassDefaultedDefs {
+  ExportClassDefaultedDefs();
+  ~ExportClassDefaultedDefs();
+
+  inline ExportClassDefaultedDefs(const ExportClassDefaultedDefs&);
+  ExportClassDefaultedDefs& operator=(const ExportClassDefaultedDefs&);
+
+  ExportClassDefaultedDefs(ExportClassDefaultedDefs&&);
+  ExportClassDefaultedDefs& operator=(ExportClassDefaultedDefs&&);
+};
+
+// Export definition.
+ExportClassDefaultedDefs::ExportClassDefaultedDefs() = default;
+ExportClassDefaultedDefs::~ExportClassDefaultedDefs() = default;
+
+// Export inline declaration and definition.
+ExportClassDefaultedDefs::ExportClassDefaultedDefs(const ExportClassDefaultedDefs&) = default;
+inline ExportClassDefaultedDefs& ExportClassDefaultedDefs::operator=(const ExportClassDefaultedDefs&) = default;
+
+ExportClassDefaultedDefs::ExportClassDefaultedDefs(ExportClassDefaultedDefs&&) = default;
+ExportClassDefaultedDefs& ExportClassDefaultedDefs::operator=(ExportClassDefaultedDefs&&) = default;
+
+
+
+//===----------------------------------------------------------------------===//
+// Class templates
+//===----------------------------------------------------------------------===//
+
+// Export whole class template.
+template<typename T>
+struct __declspec(dllexport) ExportClassTmpl {
+                 void normalDecl();
+                 void normalDef();
+                 void normalInclass() {}
+                 void normalInlineDef();
+          inline void normalInlineDecl();
+  virtual        void virtualDecl();
+  virtual        void virtualDef();
+  virtual        void virtualInclass() {}
+  virtual        void virtualInlineDef();
+  virtual inline void virtualInlineDecl();
+  static         void staticDecl();
+  static         void staticDef();
+  static         void staticInclass() {}
+  static         void staticInlineDef();
+  static  inline void staticInlineDecl();
+
+protected:
+                 void protectedDef();
+private:
+                 void privateDef();
+public:
+
+                 int  Field;
+  static         int  StaticField;
+  static         int  StaticFieldDef;
+  static  const  int  StaticConstField;
+  static  const  int  StaticConstFieldDef;
+  static  const  int  StaticConstFieldEqualInit = 1;
+  static  const  int  StaticConstFieldBraceInit{1};
+  constexpr static int ConstexprField = 1;
+  constexpr static int ConstexprFieldDef = 1;
+};
+
+template<typename T>        void ExportClassTmpl<T>::normalDef() {}
+template<typename T> inline void ExportClassTmpl<T>::normalInlineDef() {}
+template<typename T>        void ExportClassTmpl<T>::normalInlineDecl() {}
+template<typename T>        void ExportClassTmpl<T>::virtualDef() {}
+template<typename T> inline void ExportClassTmpl<T>::virtualInlineDef() {}
+template<typename T>        void ExportClassTmpl<T>::virtualInlineDecl() {}
+template<typename T>        void ExportClassTmpl<T>::staticDef() {}
+template<typename T> inline void ExportClassTmpl<T>::staticInlineDef() {}
+template<typename T>        void ExportClassTmpl<T>::staticInlineDecl() {}
+template<typename T>        void ExportClassTmpl<T>::protectedDef() {}
+template<typename T>        void ExportClassTmpl<T>::privateDef() {}
+
+template<typename T>        int  ExportClassTmpl<T>::StaticFieldDef;
+template<typename T> const  int  ExportClassTmpl<T>::StaticConstFieldDef = 1;
+template<typename T> constexpr int ExportClassTmpl<T>::ConstexprFieldDef;
+
+
+// A non-exported class template.
+template<typename T>
+struct ClassTmpl {
+                 void normalDecl();
+                 void normalDef();
+                 void normalInclass() {}
+                 void normalInlineDef();
+          inline void normalInlineDecl();
+  virtual        void virtualDecl();
+  virtual        void virtualDef();
+  virtual        void virtualInclass() {}
+  virtual        void virtualInlineDef();
+  virtual inline void virtualInlineDecl();
+  static         void staticDecl();
+  static         void staticDef();
+  static         void staticInclass() {}
+  static         void staticInlineDef();
+  static  inline void staticInlineDecl();
+
+protected:
+                 void protectedDef();
+private:
+                 void privateDef();
+public:
+
+                 int  Field;
+  static         int  StaticField;
+  static         int  StaticFieldDef;
+  static  const  int  StaticConstField;
+  static  const  int  StaticConstFieldDef;
+  static  const  int  StaticConstFieldEqualInit = 1;
+  static  const  int  StaticConstFieldBraceInit{1};
+  constexpr static int ConstexprField = 1;
+  constexpr static int ConstexprFieldDef = 1;
+};
+
+template<typename T>        void ClassTmpl<T>::normalDef() {}
+template<typename T> inline void ClassTmpl<T>::normalInlineDef() {}
+template<typename T>        void ClassTmpl<T>::normalInlineDecl() {}
+template<typename T>        void ClassTmpl<T>::virtualDef() {}
+template<typename T> inline void ClassTmpl<T>::virtualInlineDef() {}
+template<typename T>        void ClassTmpl<T>::virtualInlineDecl() {}
+template<typename T>        void ClassTmpl<T>::staticDef() {}
+template<typename T> inline void ClassTmpl<T>::staticInlineDef() {}
+template<typename T>        void ClassTmpl<T>::staticInlineDecl() {}
+template<typename T>        void ClassTmpl<T>::protectedDef() {}
+template<typename T>        void ClassTmpl<T>::privateDef() {}
+
+template<typename T>        int  ClassTmpl<T>::StaticFieldDef;
+template<typename T> const  int  ClassTmpl<T>::StaticConstFieldDef = 1;
+template<typename T> constexpr int ClassTmpl<T>::ConstexprFieldDef;
+
+
+// Export implicit instantiation of an exported class template.
+ExportClassTmpl<ImplicitInst_Exported> ImplicitInst;
+
+// Export explicit instantiation declaration of an exported class template.
+extern template struct ExportClassTmpl<ExplicitDecl_Exported>;
+       template struct ExportClassTmpl<ExplicitDecl_Exported>;
+
+// Export explicit instantiation definition of an exported class template.
+template struct ExportClassTmpl<ExplicitInst_Exported>;
+
+// Export specialization of an exported class template.
+template<>
+struct __declspec(dllexport) ExportClassTmpl<ExplicitSpec_Exported> {
+  void normal() {}
+};
+
+// Not exporting specialization of an exported class template without explicit
+// dllexport.
+template<>
+struct ExportClassTmpl<ExplicitSpec_NotExported> {
+  void normal() {}
+};
+
+
+// Export explicit instantiation declaration of a non-exported class template.
+extern template struct __declspec(dllexport) ClassTmpl<ExplicitDecl_Exported>;
+       template struct __declspec(dllexport) ClassTmpl<ExplicitDecl_Exported>;
+
+// Export explicit instantiation definition of a non-exported class template.
+template struct __declspec(dllexport) ClassTmpl<ExplicitInst_Exported>;
+
+// Export specialization of a non-exported class template.
+template<>
+struct __declspec(dllexport) ClassTmpl<ExplicitSpec_Exported> {
+  void normal() {}
+};
+
+// Not exporting specialization of a non-exported class template without
+// explicit dllexport.
+template<>
+struct ClassTmpl<ExplicitSpec_NotExported> {
+  void normal() {}
+};
+
+
+// Export member specializations.
+template<> __declspec(dllexport)        void ClassTmpl<MemberSpec_Exported>::normalDef() {}
+template<> __declspec(dllexport) inline void ClassTmpl<MemberSpec_Exported>::normalInlineDef() {}
+template<> __declspec(dllexport)        void ClassTmpl<MemberSpec_Exported>::normalInlineDecl() {}
+template<> __declspec(dllexport)        void ClassTmpl<MemberSpec_Exported>::virtualDef() {}
+template<> __declspec(dllexport) inline void ClassTmpl<MemberSpec_Exported>::virtualInlineDef() {}
+template<> __declspec(dllexport)        void ClassTmpl<MemberSpec_Exported>::virtualInlineDecl() {}
+template<> __declspec(dllexport)        void ClassTmpl<MemberSpec_Exported>::staticDef() {}
+template<> __declspec(dllexport) inline void ClassTmpl<MemberSpec_Exported>::staticInlineDef() {}
+template<> __declspec(dllexport)        void ClassTmpl<MemberSpec_Exported>::staticInlineDecl() {}
+
+template<> __declspec(dllexport)        int  ClassTmpl<MemberSpec_Exported>::StaticFieldDef;
+template<> __declspec(dllexport) const  int  ClassTmpl<MemberSpec_Exported>::StaticConstFieldDef = 1;
+// FIXME: Clang erroneously diagnoses this definition which seems to be a bug.
+// There should be no diagnostic here.
+// expected-error@+1{{declaration of constexpr static data member 'ConstexprFieldDef' requires an initializer}}
+template<> __declspec(dllexport) constexpr int ClassTmpl<MemberSpec_Exported>::ConstexprFieldDef;
+
+
+
+//===----------------------------------------------------------------------===//
 // Class template members
 //===----------------------------------------------------------------------===//
 
@@ -771,7 +1067,7 @@ private:
   __declspec(dllexport)                void privateDef();
 public:
 
-  __declspec(dllexport)                int  Field; // expected-warning{{'dllexport' attribute only applies to variables and functions}}
+  __declspec(dllexport)                int  Field; // expected-warning{{'dllexport' attribute only applies to variables, functions and classes}}
   __declspec(dllexport) static         int  StaticField;
   __declspec(dllexport) static         int  StaticFieldDef;
   __declspec(dllexport) static  const  int  StaticConstField;
