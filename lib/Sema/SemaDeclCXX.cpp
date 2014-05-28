@@ -11972,6 +11972,12 @@ void Sema::SetDeclDeleted(Decl *Dcl, SourceLocation DelLoc) {
     Fn = Fn->getCanonicalDecl();
   }
 
+  // dllimport/dllexport cannot be deleted.
+  if (const InheritableAttr *DLLAttr = getDLLAttr(Fn)) {
+    Diag(Fn->getLocation(), diag::err_attribute_dll_deleted) << DLLAttr;
+    Fn->setInvalidDecl();
+  }
+
   if (Fn->isDeleted())
     return;
 
