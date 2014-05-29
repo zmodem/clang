@@ -240,28 +240,28 @@ struct __declspec(dllimport) ImportClassSpecials {
   // G64-DAG: declare dllimport                void @_ZN19ImportClassSpecialsD1Ev(%struct.ImportClassSpecials*)
   ~ImportClassSpecials();
 
-  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassSpecials* @"\01??0ImportClassSpecials@@QAE@ABU0@@Z"(%struct.ImportClassSpecials* returned, %struct.ImportClassSpecials*)
-  // M64-DAG: declare dllimport                %struct.ImportClassSpecials* @"\01??0ImportClassSpecials@@QEAA@AEBU0@@Z"(%struct.ImportClassSpecials* returned, %struct.ImportClassSpecials*)
-  // G32-DAG: declare dllimport x86_thiscallcc void @_ZN19ImportClassSpecialsC1ERKS_(%struct.ImportClassSpecials*, %struct.ImportClassSpecials*)
-  // G64-DAG: declare dllimport                void @_ZN19ImportClassSpecialsC1ERKS_(%struct.ImportClassSpecials*, %struct.ImportClassSpecials*)
+  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassSpecials* @"\01??0ImportClassSpecials@@QAE@ABU0@@Z"(%struct.ImportClassSpecials* returned, %struct.ImportClassSpecials* nonnull)
+  // M64-DAG: declare dllimport                %struct.ImportClassSpecials* @"\01??0ImportClassSpecials@@QEAA@AEBU0@@Z"(%struct.ImportClassSpecials* returned, %struct.ImportClassSpecials* nonnull)
+  // G32-DAG: declare dllimport x86_thiscallcc void @_ZN19ImportClassSpecialsC1ERKS_(%struct.ImportClassSpecials*, %struct.ImportClassSpecials* nonnull)
+  // G64-DAG: declare dllimport                void @_ZN19ImportClassSpecialsC1ERKS_(%struct.ImportClassSpecials*, %struct.ImportClassSpecials* nonnull)
   ImportClassSpecials(const ImportClassSpecials&);
 
-  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassSpecials* @"\01??4ImportClassSpecials@@QAEAAU0@ABU0@@Z"(%struct.ImportClassSpecials*, %struct.ImportClassSpecials*)
-  // M64-DAG: declare dllimport                %struct.ImportClassSpecials* @"\01??4ImportClassSpecials@@QEAAAEAU0@AEBU0@@Z"(%struct.ImportClassSpecials*, %struct.ImportClassSpecials*)
-  // G32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassSpecials* @_ZN19ImportClassSpecialsaSERKS_(%struct.ImportClassSpecials*, %struct.ImportClassSpecials*)
-  // G64-DAG: declare dllimport                %struct.ImportClassSpecials* @_ZN19ImportClassSpecialsaSERKS_(%struct.ImportClassSpecials*, %struct.ImportClassSpecials*)
+  // M32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportClassSpecials* @"\01??4ImportClassSpecials@@QAEAAU0@ABU0@@Z"(%struct.ImportClassSpecials*, %struct.ImportClassSpecials* nonnull)
+  // M64-DAG: declare dllimport nonnull               %struct.ImportClassSpecials* @"\01??4ImportClassSpecials@@QEAAAEAU0@AEBU0@@Z"(%struct.ImportClassSpecials*, %struct.ImportClassSpecials* nonnull)
+  // G32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportClassSpecials* @_ZN19ImportClassSpecialsaSERKS_(%struct.ImportClassSpecials*, %struct.ImportClassSpecials* nonnull)
+  // G64-DAG: declare dllimport nonnull               %struct.ImportClassSpecials* @_ZN19ImportClassSpecialsaSERKS_(%struct.ImportClassSpecials*, %struct.ImportClassSpecials* nonnull)
   ImportClassSpecials& operator=(const ImportClassSpecials&);
 
-  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassSpecials* @"\01??0ImportClassSpecials@@QAE@$$QAU0@@Z"(%struct.ImportClassSpecials* returned, %struct.ImportClassSpecials*)
-  // M64-DAG: declare dllimport                %struct.ImportClassSpecials* @"\01??0ImportClassSpecials@@QEAA@$$QEAU0@@Z"(%struct.ImportClassSpecials* returned, %struct.ImportClassSpecials*)
-  // G32-DAG: declare dllimport x86_thiscallcc void @_ZN19ImportClassSpecialsC1EOS_(%struct.ImportClassSpecials*, %struct.ImportClassSpecials*)
-  // G64-DAG: declare dllimport                void @_ZN19ImportClassSpecialsC1EOS_(%struct.ImportClassSpecials*, %struct.ImportClassSpecials*)
+  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassSpecials* @"\01??0ImportClassSpecials@@QAE@$$QAU0@@Z"(%struct.ImportClassSpecials* returned, %struct.ImportClassSpecials* nonnull)
+  // M64-DAG: declare dllimport                %struct.ImportClassSpecials* @"\01??0ImportClassSpecials@@QEAA@$$QEAU0@@Z"(%struct.ImportClassSpecials* returned, %struct.ImportClassSpecials* nonnull)
+  // G32-DAG: declare dllimport x86_thiscallcc void @_ZN19ImportClassSpecialsC1EOS_(%struct.ImportClassSpecials*, %struct.ImportClassSpecials* nonnull)
+  // G64-DAG: declare dllimport                void @_ZN19ImportClassSpecialsC1EOS_(%struct.ImportClassSpecials*, %struct.ImportClassSpecials* nonnull)
   ImportClassSpecials(ImportClassSpecials&&);
 
-  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassSpecials* @"\01??4ImportClassSpecials@@QAEAAU0@$$QAU0@@Z"(%struct.ImportClassSpecials*, %struct.ImportClassSpecials*)
-  // M64-DAG: declare dllimport                %struct.ImportClassSpecials* @"\01??4ImportClassSpecials@@QEAAAEAU0@$$QEAU0@@Z"(%struct.ImportClassSpecials*, %struct.ImportClassSpecials*)
-  // G32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassSpecials* @_ZN19ImportClassSpecialsaSEOS_(%struct.ImportClassSpecials*, %struct.ImportClassSpecials*)
-  // G64-DAG: declare dllimport                %struct.ImportClassSpecials* @_ZN19ImportClassSpecialsaSEOS_(%struct.ImportClassSpecials*, %struct.ImportClassSpecials*)
+  // M32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportClassSpecials* @"\01??4ImportClassSpecials@@QAEAAU0@$$QAU0@@Z"(%struct.ImportClassSpecials*, %struct.ImportClassSpecials* nonnull)
+  // M64-DAG: declare dllimport nonnull                %struct.ImportClassSpecials* @"\01??4ImportClassSpecials@@QEAAAEAU0@$$QEAU0@@Z"(%struct.ImportClassSpecials*, %struct.ImportClassSpecials* nonnull)
+  // G32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportClassSpecials* @_ZN19ImportClassSpecialsaSEOS_(%struct.ImportClassSpecials*, %struct.ImportClassSpecials* nonnull)
+  // G64-DAG: declare dllimport nonnull                %struct.ImportClassSpecials* @_ZN19ImportClassSpecialsaSEOS_(%struct.ImportClassSpecials*, %struct.ImportClassSpecials* nonnull)
   ImportClassSpecials& operator=(ImportClassSpecials&&);
 };
 USESPECIALS(ImportClassSpecials)
@@ -296,36 +296,36 @@ USESPECIALS(ImportTrivialSpecials)
 // GO1-DAG: define available_externally dllimport x86_thiscallcc void @_ZN21ImportComplexSpecialsD1Ev(
 //
 // Copy constructor
-// M32-DAG: declare dllimport x86_thiscallcc %struct.ImportComplexSpecials* @"\01??0ImportComplexSpecials@@QAE@ABU0@@Z"(%struct.ImportComplexSpecials* returned, %struct.ImportComplexSpecials*)
-// M64-DAG: declare dllimport                %struct.ImportComplexSpecials* @"\01??0ImportComplexSpecials@@QEAA@AEBU0@@Z"(%struct.ImportComplexSpecials* returned, %struct.ImportComplexSpecials*)
-// G32-DAG: declare dllimport x86_thiscallcc void @_ZN21ImportComplexSpecialsC1ERKS_(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials*)
-// G64-DAG: declare dllimport                void @_ZN21ImportComplexSpecialsC1ERKS_(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials*)
+// M32-DAG: declare dllimport x86_thiscallcc %struct.ImportComplexSpecials* @"\01??0ImportComplexSpecials@@QAE@ABU0@@Z"(%struct.ImportComplexSpecials* returned, %struct.ImportComplexSpecials* nonnull)
+// M64-DAG: declare dllimport                %struct.ImportComplexSpecials* @"\01??0ImportComplexSpecials@@QEAA@AEBU0@@Z"(%struct.ImportComplexSpecials* returned, %struct.ImportComplexSpecials* nonnull)
+// G32-DAG: declare dllimport x86_thiscallcc void @_ZN21ImportComplexSpecialsC1ERKS_(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials* nonnull)
+// G64-DAG: declare dllimport                void @_ZN21ImportComplexSpecialsC1ERKS_(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials* nonnull)
 // MO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportComplexSpecials* @"\01??0ImportComplexSpecials@@QAE@ABU0@@Z"(
 // GO1-DAG: define available_externally dllimport x86_thiscallcc void @_ZN21ImportComplexSpecialsC1ERKS_(
 //
 // Copy assignment
-// M32-DAG: declare dllimport x86_thiscallcc %struct.ImportComplexSpecials* @"\01??4ImportComplexSpecials@@QAEAAU0@ABU0@@Z"(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials*)
-// M64-DAG: declare dllimport                %struct.ImportComplexSpecials* @"\01??4ImportComplexSpecials@@QEAAAEAU0@AEBU0@@Z"(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials*)
-// G32-DAG: declare dllimport x86_thiscallcc %struct.ImportComplexSpecials* @_ZN21ImportComplexSpecialsaSERKS_(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials*)
-// G64-DAG: declare dllimport                %struct.ImportComplexSpecials* @_ZN21ImportComplexSpecialsaSERKS_(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials*)
-// MO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportComplexSpecials* @"\01??4ImportComplexSpecials@@QAEAAU0@ABU0@@Z"(
-// GO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportComplexSpecials* @_ZN21ImportComplexSpecialsaSERKS_(
+// M32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportComplexSpecials* @"\01??4ImportComplexSpecials@@QAEAAU0@ABU0@@Z"(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials* nonnull)
+// M64-DAG: declare dllimport nonnull                %struct.ImportComplexSpecials* @"\01??4ImportComplexSpecials@@QEAAAEAU0@AEBU0@@Z"(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials* nonnull)
+// G32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportComplexSpecials* @_ZN21ImportComplexSpecialsaSERKS_(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials* nonnull)
+// G64-DAG: declare dllimport nonnull                %struct.ImportComplexSpecials* @_ZN21ImportComplexSpecialsaSERKS_(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials* nonnull)
+// MO1-DAG: define available_externally dllimport x86_thiscallcc nonnull %struct.ImportComplexSpecials* @"\01??4ImportComplexSpecials@@QAEAAU0@ABU0@@Z"(
+// GO1-DAG: define available_externally dllimport x86_thiscallcc nonnull %struct.ImportComplexSpecials* @_ZN21ImportComplexSpecialsaSERKS_(
 //
 // Move constructor
-// M32-DAG: declare dllimport x86_thiscallcc %struct.ImportComplexSpecials* @"\01??0ImportComplexSpecials@@QAE@$$QAU0@@Z"(%struct.ImportComplexSpecials* returned, %struct.ImportComplexSpecials*)
-// M64-DAG: declare dllimport                %struct.ImportComplexSpecials* @"\01??0ImportComplexSpecials@@QEAA@$$QEAU0@@Z"(%struct.ImportComplexSpecials* returned, %struct.ImportComplexSpecials*)
-// G32-DAG: declare dllimport x86_thiscallcc void @_ZN21ImportComplexSpecialsC1EOS_(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials*)
-// G64-DAG: declare dllimport                void @_ZN21ImportComplexSpecialsC1EOS_(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials*)
+// M32-DAG: declare dllimport x86_thiscallcc %struct.ImportComplexSpecials* @"\01??0ImportComplexSpecials@@QAE@$$QAU0@@Z"(%struct.ImportComplexSpecials* returned, %struct.ImportComplexSpecials* nonnull)
+// M64-DAG: declare dllimport                %struct.ImportComplexSpecials* @"\01??0ImportComplexSpecials@@QEAA@$$QEAU0@@Z"(%struct.ImportComplexSpecials* returned, %struct.ImportComplexSpecials* nonnull)
+// G32-DAG: declare dllimport x86_thiscallcc void @_ZN21ImportComplexSpecialsC1EOS_(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials* nonnull)
+// G64-DAG: declare dllimport                void @_ZN21ImportComplexSpecialsC1EOS_(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials* nonnull)
 // MO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportComplexSpecials* @"\01??0ImportComplexSpecials@@QAE@$$QAU0@@Z"(
 // GO1-DAG: define available_externally dllimport x86_thiscallcc void @_ZN21ImportComplexSpecialsC1EOS_(
 //
 // Move assignment
-// M32-DAG: declare dllimport x86_thiscallcc %struct.ImportComplexSpecials* @"\01??4ImportComplexSpecials@@QAEAAU0@$$QAU0@@Z"(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials*)
-// M64-DAG: declare dllimport                %struct.ImportComplexSpecials* @"\01??4ImportComplexSpecials@@QEAAAEAU0@$$QEAU0@@Z"(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials*)
-// G32-DAG: declare dllimport x86_thiscallcc %struct.ImportComplexSpecials* @_ZN21ImportComplexSpecialsaSEOS_(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials*)
-// G64-DAG: declare dllimport                %struct.ImportComplexSpecials* @_ZN21ImportComplexSpecialsaSEOS_(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials*)
-// MO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportComplexSpecials* @"\01??4ImportComplexSpecials@@QAEAAU0@$$QAU0@@Z"(
-// GO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportComplexSpecials* @_ZN21ImportComplexSpecialsaSEOS_(
+// M32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportComplexSpecials* @"\01??4ImportComplexSpecials@@QAEAAU0@$$QAU0@@Z"(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials* nonnull)
+// M64-DAG: declare dllimport nonnull                %struct.ImportComplexSpecials* @"\01??4ImportComplexSpecials@@QEAAAEAU0@$$QEAU0@@Z"(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials* nonnull)
+// G32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportComplexSpecials* @_ZN21ImportComplexSpecialsaSEOS_(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials* nonnull)
+// G64-DAG: declare dllimport nonnull                %struct.ImportComplexSpecials* @_ZN21ImportComplexSpecialsaSEOS_(%struct.ImportComplexSpecials*, %struct.ImportComplexSpecials* nonnull)
+// MO1-DAG: define available_externally dllimport x86_thiscallcc nonnull %struct.ImportComplexSpecials* @"\01??4ImportComplexSpecials@@QAEAAU0@$$QAU0@@Z"(
+// GO1-DAG: define available_externally dllimport x86_thiscallcc nonnull %struct.ImportComplexSpecials* @_ZN21ImportComplexSpecialsaSEOS_(
 struct __declspec(dllimport) ImportComplexSpecials {
   ForceNonTrivial v;
 };
@@ -350,36 +350,36 @@ struct __declspec(dllimport) ImportInlineSpecials {
   // GO1-DAG: define available_externally dllimport x86_thiscallcc void @_ZN20ImportInlineSpecialsD1Ev(
   ~ImportInlineSpecials() {}
 
-  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportInlineSpecials* @"\01??0ImportInlineSpecials@@QAE@ABU0@@Z"(%struct.ImportInlineSpecials* returned, %struct.ImportInlineSpecials*)
-  // M64-DAG: declare dllimport                %struct.ImportInlineSpecials* @"\01??0ImportInlineSpecials@@QEAA@AEBU0@@Z"(%struct.ImportInlineSpecials* returned, %struct.ImportInlineSpecials*)
-  // G32-DAG: declare dllimport x86_thiscallcc void @_ZN20ImportInlineSpecialsC1ERKS_(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials*)
-  // G64-DAG: declare dllimport                void @_ZN20ImportInlineSpecialsC1ERKS_(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials*)
+  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportInlineSpecials* @"\01??0ImportInlineSpecials@@QAE@ABU0@@Z"(%struct.ImportInlineSpecials* returned, %struct.ImportInlineSpecials* nonnull)
+  // M64-DAG: declare dllimport                %struct.ImportInlineSpecials* @"\01??0ImportInlineSpecials@@QEAA@AEBU0@@Z"(%struct.ImportInlineSpecials* returned, %struct.ImportInlineSpecials* nonnull)
+  // G32-DAG: declare dllimport x86_thiscallcc void @_ZN20ImportInlineSpecialsC1ERKS_(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials* nonnull)
+  // G64-DAG: declare dllimport                void @_ZN20ImportInlineSpecialsC1ERKS_(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials* nonnull)
   // MO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportInlineSpecials* @"\01??0ImportInlineSpecials@@QAE@ABU0@@Z"(
   // GO1-DAG: define available_externally dllimport x86_thiscallcc void @_ZN20ImportInlineSpecialsC1ERKS_(
   inline ImportInlineSpecials(const ImportInlineSpecials&);
 
-  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportInlineSpecials* @"\01??4ImportInlineSpecials@@QAEAAU0@ABU0@@Z"(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials*)
-  // M64-DAG: declare dllimport                %struct.ImportInlineSpecials* @"\01??4ImportInlineSpecials@@QEAAAEAU0@AEBU0@@Z"(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials*)
-  // G32-DAG: declare dllimport x86_thiscallcc %struct.ImportInlineSpecials* @_ZN20ImportInlineSpecialsaSERKS_(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials*)
-  // G64-DAG: declare dllimport                %struct.ImportInlineSpecials* @_ZN20ImportInlineSpecialsaSERKS_(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials*)
-  // MO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportInlineSpecials* @"\01??4ImportInlineSpecials@@QAEAAU0@ABU0@@Z"(
-  // GO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportInlineSpecials* @_ZN20ImportInlineSpecialsaSERKS_(
+  // M32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportInlineSpecials* @"\01??4ImportInlineSpecials@@QAEAAU0@ABU0@@Z"(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials* nonnull)
+  // M64-DAG: declare dllimport nonnull                %struct.ImportInlineSpecials* @"\01??4ImportInlineSpecials@@QEAAAEAU0@AEBU0@@Z"(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials* nonnull)
+  // G32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportInlineSpecials* @_ZN20ImportInlineSpecialsaSERKS_(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials* nonnull)
+  // G64-DAG: declare dllimport nonnull                %struct.ImportInlineSpecials* @_ZN20ImportInlineSpecialsaSERKS_(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials* nonnull)
+  // MO1-DAG: define available_externally dllimport x86_thiscallcc nonnull %struct.ImportInlineSpecials* @"\01??4ImportInlineSpecials@@QAEAAU0@ABU0@@Z"(
+  // GO1-DAG: define available_externally dllimport x86_thiscallcc nonnull %struct.ImportInlineSpecials* @_ZN20ImportInlineSpecialsaSERKS_(
   ImportInlineSpecials& operator=(const ImportInlineSpecials&);
 
-  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportInlineSpecials* @"\01??0ImportInlineSpecials@@QAE@$$QAU0@@Z"(%struct.ImportInlineSpecials* returned, %struct.ImportInlineSpecials*)
-  // M64-DAG: declare dllimport                %struct.ImportInlineSpecials* @"\01??0ImportInlineSpecials@@QEAA@$$QEAU0@@Z"(%struct.ImportInlineSpecials* returned, %struct.ImportInlineSpecials*)
-  // G32-DAG: declare dllimport x86_thiscallcc void @_ZN20ImportInlineSpecialsC1EOS_(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials*)
-  // G64-DAG: declare dllimport                void @_ZN20ImportInlineSpecialsC1EOS_(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials*)
+  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportInlineSpecials* @"\01??0ImportInlineSpecials@@QAE@$$QAU0@@Z"(%struct.ImportInlineSpecials* returned, %struct.ImportInlineSpecials* nonnull)
+  // M64-DAG: declare dllimport                %struct.ImportInlineSpecials* @"\01??0ImportInlineSpecials@@QEAA@$$QEAU0@@Z"(%struct.ImportInlineSpecials* returned, %struct.ImportInlineSpecials* nonnull)
+  // G32-DAG: declare dllimport x86_thiscallcc void @_ZN20ImportInlineSpecialsC1EOS_(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials* nonnull)
+  // G64-DAG: declare dllimport                void @_ZN20ImportInlineSpecialsC1EOS_(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials* nonnull)
   // MO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportInlineSpecials* @"\01??0ImportInlineSpecials@@QAE@$$QAU0@@Z"(
   // GO1-DAG: define available_externally dllimport x86_thiscallcc void @_ZN20ImportInlineSpecialsC1EOS_(
   ImportInlineSpecials(ImportInlineSpecials&&) {}
 
-  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportInlineSpecials* @"\01??4ImportInlineSpecials@@QAEAAU0@$$QAU0@@Z"(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials*)
-  // M64-DAG: declare dllimport                %struct.ImportInlineSpecials* @"\01??4ImportInlineSpecials@@QEAAAEAU0@$$QEAU0@@Z"(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials*)
-  // G32-DAG: declare dllimport x86_thiscallcc %struct.ImportInlineSpecials* @_ZN20ImportInlineSpecialsaSEOS_(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials*)
-  // G64-DAG: declare dllimport                %struct.ImportInlineSpecials* @_ZN20ImportInlineSpecialsaSEOS_(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials*)
-  // MO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportInlineSpecials* @"\01??4ImportInlineSpecials@@QAEAAU0@$$QAU0@@Z"(
-  // GO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportInlineSpecials* @_ZN20ImportInlineSpecialsaSEOS_(
+  // M32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportInlineSpecials* @"\01??4ImportInlineSpecials@@QAEAAU0@$$QAU0@@Z"(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials* nonnull)
+  // M64-DAG: declare dllimport nonnull                %struct.ImportInlineSpecials* @"\01??4ImportInlineSpecials@@QEAAAEAU0@$$QEAU0@@Z"(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials* nonnull)
+  // G32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportInlineSpecials* @_ZN20ImportInlineSpecialsaSEOS_(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials* nonnull)
+  // G64-DAG: declare dllimport nonnull                %struct.ImportInlineSpecials* @_ZN20ImportInlineSpecialsaSEOS_(%struct.ImportInlineSpecials*, %struct.ImportInlineSpecials* nonnull)
+  // MO1-DAG: define available_externally dllimport x86_thiscallcc nonnull %struct.ImportInlineSpecials* @"\01??4ImportInlineSpecials@@QAEAAU0@$$QAU0@@Z"(
+  // GO1-DAG: define available_externally dllimport x86_thiscallcc nonnull %struct.ImportInlineSpecials* @_ZN20ImportInlineSpecialsaSEOS_(
   ImportInlineSpecials& operator=(ImportInlineSpecials&&) { return *this; }
 };
 ImportInlineSpecials::ImportInlineSpecials(const ImportInlineSpecials&) {}
@@ -405,36 +405,36 @@ struct __declspec(dllimport) ImportClassDefaulted {
   // GO1-DAG: define available_externally dllimport x86_thiscallcc void @_ZN20ImportClassDefaultedD1Ev(%struct.ImportClassDefaulted* %this)
   ~ImportClassDefaulted() = default;
 
-  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassDefaulted* @"\01??0ImportClassDefaulted@@QAE@ABU0@@Z"(%struct.ImportClassDefaulted* returned, %struct.ImportClassDefaulted*)
-  // M64-DAG: declare dllimport                %struct.ImportClassDefaulted* @"\01??0ImportClassDefaulted@@QEAA@AEBU0@@Z"(%struct.ImportClassDefaulted* returned, %struct.ImportClassDefaulted*)
-  // G32-DAG: declare dllimport x86_thiscallcc void @_ZN20ImportClassDefaultedC1ERKS_(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted*)
-  // G64-DAG: declare dllimport                void @_ZN20ImportClassDefaultedC1ERKS_(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted*)
-  // MO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportClassDefaulted* @"\01??0ImportClassDefaulted@@QAE@ABU0@@Z"(%struct.ImportClassDefaulted* returned %this, %struct.ImportClassDefaulted*)
-  // GO1-DAG: define available_externally dllimport x86_thiscallcc void @_ZN20ImportClassDefaultedC1ERKS_(%struct.ImportClassDefaulted* %this, %struct.ImportClassDefaulted*)
+  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassDefaulted* @"\01??0ImportClassDefaulted@@QAE@ABU0@@Z"(%struct.ImportClassDefaulted* returned, %struct.ImportClassDefaulted* nonnull)
+  // M64-DAG: declare dllimport                %struct.ImportClassDefaulted* @"\01??0ImportClassDefaulted@@QEAA@AEBU0@@Z"(%struct.ImportClassDefaulted* returned, %struct.ImportClassDefaulted* nonnull)
+  // G32-DAG: declare dllimport x86_thiscallcc void @_ZN20ImportClassDefaultedC1ERKS_(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted* nonnull)
+  // G64-DAG: declare dllimport                void @_ZN20ImportClassDefaultedC1ERKS_(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted* nonnull)
+  // MO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportClassDefaulted* @"\01??0ImportClassDefaulted@@QAE@ABU0@@Z"(%struct.ImportClassDefaulted* returned %this, %struct.ImportClassDefaulted* nonnull)
+  // GO1-DAG: define available_externally dllimport x86_thiscallcc void @_ZN20ImportClassDefaultedC1ERKS_(%struct.ImportClassDefaulted* %this, %struct.ImportClassDefaulted* nonnull)
   ImportClassDefaulted(const ImportClassDefaulted&) = default;
 
-  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassDefaulted* @"\01??4ImportClassDefaulted@@QAEAAU0@ABU0@@Z"(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted*)
-  // M64-DAG: declare dllimport                %struct.ImportClassDefaulted* @"\01??4ImportClassDefaulted@@QEAAAEAU0@AEBU0@@Z"(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted*)
-  // G32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassDefaulted* @_ZN20ImportClassDefaultedaSERKS_(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted*)
-  // G64-DAG: declare dllimport                %struct.ImportClassDefaulted* @_ZN20ImportClassDefaultedaSERKS_(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted*)
-  // MO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportClassDefaulted* @"\01??4ImportClassDefaulted@@QAEAAU0@ABU0@@Z"(%struct.ImportClassDefaulted* %this, %struct.ImportClassDefaulted*)
-  // GO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportClassDefaulted* @_ZN20ImportClassDefaultedaSERKS_(%struct.ImportClassDefaulted* %this, %struct.ImportClassDefaulted*)
+  // M32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportClassDefaulted* @"\01??4ImportClassDefaulted@@QAEAAU0@ABU0@@Z"(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted* nonnull)
+  // M64-DAG: declare dllimport nonnull                %struct.ImportClassDefaulted* @"\01??4ImportClassDefaulted@@QEAAAEAU0@AEBU0@@Z"(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted* nonnull)
+  // G32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportClassDefaulted* @_ZN20ImportClassDefaultedaSERKS_(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted* nonnull)
+  // G64-DAG: declare dllimport nonnull                %struct.ImportClassDefaulted* @_ZN20ImportClassDefaultedaSERKS_(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted* nonnull)
+  // MO1-DAG: define available_externally dllimport x86_thiscallcc nonnull %struct.ImportClassDefaulted* @"\01??4ImportClassDefaulted@@QAEAAU0@ABU0@@Z"(%struct.ImportClassDefaulted* %this, %struct.ImportClassDefaulted* nonnull)
+  // GO1-DAG: define available_externally dllimport x86_thiscallcc nonnull %struct.ImportClassDefaulted* @_ZN20ImportClassDefaultedaSERKS_(%struct.ImportClassDefaulted* %this, %struct.ImportClassDefaulted* nonnull)
   ImportClassDefaulted& operator=(const ImportClassDefaulted&) = default;
 
-  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassDefaulted* @"\01??0ImportClassDefaulted@@QAE@$$QAU0@@Z"(%struct.ImportClassDefaulted* returned, %struct.ImportClassDefaulted*)
-  // M64-DAG: declare dllimport                %struct.ImportClassDefaulted* @"\01??0ImportClassDefaulted@@QEAA@$$QEAU0@@Z"(%struct.ImportClassDefaulted* returned, %struct.ImportClassDefaulted*)
-  // G32-DAG: declare dllimport x86_thiscallcc void @_ZN20ImportClassDefaultedC1EOS_(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted*)
-  // G64-DAG: declare dllimport                void @_ZN20ImportClassDefaultedC1EOS_(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted*)
-  // MO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportClassDefaulted* @"\01??0ImportClassDefaulted@@QAE@$$QAU0@@Z"(%struct.ImportClassDefaulted* returned %this, %struct.ImportClassDefaulted*)
-  // GO1-DAG: define available_externally dllimport x86_thiscallcc void @_ZN20ImportClassDefaultedC1EOS_(%struct.ImportClassDefaulted* %this, %struct.ImportClassDefaulted*)
+  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassDefaulted* @"\01??0ImportClassDefaulted@@QAE@$$QAU0@@Z"(%struct.ImportClassDefaulted* returned, %struct.ImportClassDefaulted* nonnull)
+  // M64-DAG: declare dllimport                %struct.ImportClassDefaulted* @"\01??0ImportClassDefaulted@@QEAA@$$QEAU0@@Z"(%struct.ImportClassDefaulted* returned, %struct.ImportClassDefaulted* nonnull)
+  // G32-DAG: declare dllimport x86_thiscallcc void @_ZN20ImportClassDefaultedC1EOS_(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted* nonnull)
+  // G64-DAG: declare dllimport                void @_ZN20ImportClassDefaultedC1EOS_(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted* nonnull)
+  // MO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportClassDefaulted* @"\01??0ImportClassDefaulted@@QAE@$$QAU0@@Z"(%struct.ImportClassDefaulted* returned %this, %struct.ImportClassDefaulted* nonnull)
+  // GO1-DAG: define available_externally dllimport x86_thiscallcc void @_ZN20ImportClassDefaultedC1EOS_(%struct.ImportClassDefaulted* %this, %struct.ImportClassDefaulted* nonnull)
   ImportClassDefaulted(ImportClassDefaulted&&) = default;
 
-  // M32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassDefaulted* @"\01??4ImportClassDefaulted@@QAEAAU0@$$QAU0@@Z"(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted*)
-  // M64-DAG: declare dllimport                %struct.ImportClassDefaulted* @"\01??4ImportClassDefaulted@@QEAAAEAU0@$$QEAU0@@Z"(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted*)
-  // G32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassDefaulted* @_ZN20ImportClassDefaultedaSEOS_(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted*)
-  // G64-DAG: declare dllimport                %struct.ImportClassDefaulted* @_ZN20ImportClassDefaultedaSEOS_(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted*)
-  // MO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportClassDefaulted* @"\01??4ImportClassDefaulted@@QAEAAU0@$$QAU0@@Z"(%struct.ImportClassDefaulted* %this, %struct.ImportClassDefaulted*)
-  // GO1-DAG: define available_externally dllimport x86_thiscallcc %struct.ImportClassDefaulted* @_ZN20ImportClassDefaultedaSEOS_(%struct.ImportClassDefaulted* %this, %struct.ImportClassDefaulted*)
+  // M32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportClassDefaulted* @"\01??4ImportClassDefaulted@@QAEAAU0@$$QAU0@@Z"(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted* nonnull)
+  // M64-DAG: declare dllimport nonnull                %struct.ImportClassDefaulted* @"\01??4ImportClassDefaulted@@QEAAAEAU0@$$QEAU0@@Z"(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted* nonnull)
+  // G32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportClassDefaulted* @_ZN20ImportClassDefaultedaSEOS_(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted* nonnull)
+  // G64-DAG: declare dllimport nonnull                %struct.ImportClassDefaulted* @_ZN20ImportClassDefaultedaSEOS_(%struct.ImportClassDefaulted*, %struct.ImportClassDefaulted* nonnull)
+  // MO1-DAG: define available_externally dllimport x86_thiscallcc nonnull %struct.ImportClassDefaulted* @"\01??4ImportClassDefaulted@@QAEAAU0@$$QAU0@@Z"(%struct.ImportClassDefaulted* %this, %struct.ImportClassDefaulted* nonnull)
+  // GO1-DAG: define available_externally dllimport x86_thiscallcc nonnull %struct.ImportClassDefaulted* @_ZN20ImportClassDefaultedaSEOS_(%struct.ImportClassDefaulted* %this, %struct.ImportClassDefaulted* nonnull)
   ImportClassDefaulted& operator=(ImportClassDefaulted&&) = default;
   ForceNonTrivial v;
 };
@@ -468,30 +468,30 @@ ImportClassDefaultedDefs::ImportClassDefaultedDefs() = default;
 // G64-DAG: declare dllimport                void @_ZN24ImportClassDefaultedDefsD1Ev(%struct.ImportClassDefaultedDefs*)
 ImportClassDefaultedDefs::~ImportClassDefaultedDefs() = default;
 
-// M32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassDefaultedDefs* @"\01??0ImportClassDefaultedDefs@@QAE@ABU0@@Z"(%struct.ImportClassDefaultedDefs* returned, %struct.ImportClassDefaultedDefs*)
-// M64-DAG: declare dllimport                %struct.ImportClassDefaultedDefs* @"\01??0ImportClassDefaultedDefs@@QEAA@AEBU0@@Z"(%struct.ImportClassDefaultedDefs* returned, %struct.ImportClassDefaultedDefs*)
-// G32-DAG: declare dllimport x86_thiscallcc void @_ZN24ImportClassDefaultedDefsC1ERKS_(%struct.ImportClassDefaultedDefs*, %struct.ImportClassDefaultedDefs*)
-// G64-DAG: declare dllimport                void @_ZN24ImportClassDefaultedDefsC1ERKS_(%struct.ImportClassDefaultedDefs*, %struct.ImportClassDefaultedDefs*)
+// M32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassDefaultedDefs* @"\01??0ImportClassDefaultedDefs@@QAE@ABU0@@Z"(%struct.ImportClassDefaultedDefs* returned, %struct.ImportClassDefaultedDefs* nonnull)
+// M64-DAG: declare dllimport                %struct.ImportClassDefaultedDefs* @"\01??0ImportClassDefaultedDefs@@QEAA@AEBU0@@Z"(%struct.ImportClassDefaultedDefs* returned, %struct.ImportClassDefaultedDefs* nonnull)
+// G32-DAG: declare dllimport x86_thiscallcc void @_ZN24ImportClassDefaultedDefsC1ERKS_(%struct.ImportClassDefaultedDefs*, %struct.ImportClassDefaultedDefs* nonnull)
+// G64-DAG: declare dllimport                void @_ZN24ImportClassDefaultedDefsC1ERKS_(%struct.ImportClassDefaultedDefs*, %struct.ImportClassDefaultedDefs* nonnull)
 inline ImportClassDefaultedDefs::ImportClassDefaultedDefs(const ImportClassDefaultedDefs&) = default;
 
-// M32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassDefaultedDefs* @"\01??4ImportClassDefaultedDefs@@QAEAAU0@ABU0@@Z"(%struct.ImportClassDefaultedDefs*, %struct.ImportClassDefaultedDefs*)
-// M64-DAG: declare dllimport                %struct.ImportClassDefaultedDefs* @"\01??4ImportClassDefaultedDefs@@QEAAAEAU0@AEBU0@@Z"(%struct.ImportClassDefaultedDefs*, %struct.ImportClassDefaultedDefs*)
-// G32-DAG: declare dllimport x86_thiscallcc %struct.ImportClassDefaultedDefs* @_ZN24ImportClassDefaultedDefsaSERKS_(%struct.ImportClassDefaultedDefs*, %struct.ImportClassDefaultedDefs*)
-// G64-DAG: declare dllimport                %struct.ImportClassDefaultedDefs* @_ZN24ImportClassDefaultedDefsaSERKS_(%struct.ImportClassDefaultedDefs*, %struct.ImportClassDefaultedDefs*)
+// M32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportClassDefaultedDefs* @"\01??4ImportClassDefaultedDefs@@QAEAAU0@ABU0@@Z"(%struct.ImportClassDefaultedDefs*, %struct.ImportClassDefaultedDefs* nonnull)
+// M64-DAG: declare dllimport nonnull                %struct.ImportClassDefaultedDefs* @"\01??4ImportClassDefaultedDefs@@QEAAAEAU0@AEBU0@@Z"(%struct.ImportClassDefaultedDefs*, %struct.ImportClassDefaultedDefs* nonnull)
+// G32-DAG: declare dllimport x86_thiscallcc nonnull %struct.ImportClassDefaultedDefs* @_ZN24ImportClassDefaultedDefsaSERKS_(%struct.ImportClassDefaultedDefs*, %struct.ImportClassDefaultedDefs* nonnull)
+// G64-DAG: declare dllimport nonnull                %struct.ImportClassDefaultedDefs* @_ZN24ImportClassDefaultedDefsaSERKS_(%struct.ImportClassDefaultedDefs*, %struct.ImportClassDefaultedDefs* nonnull)
 inline ImportClassDefaultedDefs& ImportClassDefaultedDefs::operator=(const ImportClassDefaultedDefs&) = default;
 
-// M32-DAG: define x86_thiscallcc %struct.ImportClassDefaultedDefs* @"\01??0ImportClassDefaultedDefs@@QAE@$$QAU0@@Z"(%struct.ImportClassDefaultedDefs* returned %this, %struct.ImportClassDefaultedDefs*)
-// M64-DAG: define                %struct.ImportClassDefaultedDefs* @"\01??0ImportClassDefaultedDefs@@QEAA@$$QEAU0@@Z"(%struct.ImportClassDefaultedDefs* returned %this, %struct.ImportClassDefaultedDefs*)
-// G32-DAG: define x86_thiscallcc void @_ZN24ImportClassDefaultedDefsC1EOS_(%struct.ImportClassDefaultedDefs* %this, %struct.ImportClassDefaultedDefs*)
-// G64-DAG: define                void @_ZN24ImportClassDefaultedDefsC1EOS_(%struct.ImportClassDefaultedDefs* %this, %struct.ImportClassDefaultedDefs*)
-// G32-DAG: define x86_thiscallcc void @_ZN24ImportClassDefaultedDefsC2EOS_(%struct.ImportClassDefaultedDefs* %this, %struct.ImportClassDefaultedDefs*)
-// G64-DAG: define                void @_ZN24ImportClassDefaultedDefsC2EOS_(%struct.ImportClassDefaultedDefs* %this, %struct.ImportClassDefaultedDefs*)
+// M32-DAG: define x86_thiscallcc %struct.ImportClassDefaultedDefs* @"\01??0ImportClassDefaultedDefs@@QAE@$$QAU0@@Z"(%struct.ImportClassDefaultedDefs* returned %this, %struct.ImportClassDefaultedDefs* nonnull)
+// M64-DAG: define                %struct.ImportClassDefaultedDefs* @"\01??0ImportClassDefaultedDefs@@QEAA@$$QEAU0@@Z"(%struct.ImportClassDefaultedDefs* returned %this, %struct.ImportClassDefaultedDefs* nonnull)
+// G32-DAG: define x86_thiscallcc void @_ZN24ImportClassDefaultedDefsC1EOS_(%struct.ImportClassDefaultedDefs* %this, %struct.ImportClassDefaultedDefs* nonnull)
+// G64-DAG: define                void @_ZN24ImportClassDefaultedDefsC1EOS_(%struct.ImportClassDefaultedDefs* %this, %struct.ImportClassDefaultedDefs* nonnull)
+// G32-DAG: define x86_thiscallcc void @_ZN24ImportClassDefaultedDefsC2EOS_(%struct.ImportClassDefaultedDefs* %this, %struct.ImportClassDefaultedDefs* nonnull)
+// G64-DAG: define                void @_ZN24ImportClassDefaultedDefsC2EOS_(%struct.ImportClassDefaultedDefs* %this, %struct.ImportClassDefaultedDefs* nonnull)
 ImportClassDefaultedDefs::ImportClassDefaultedDefs(ImportClassDefaultedDefs&&) = default; // dllimport ignored
 
-// M32-DAG: define x86_thiscallcc %struct.ImportClassDefaultedDefs* @"\01??4ImportClassDefaultedDefs@@QAEAAU0@$$QAU0@@Z"(%struct.ImportClassDefaultedDefs* %this, %struct.ImportClassDefaultedDefs*)
-// M64-DAG: define                %struct.ImportClassDefaultedDefs* @"\01??4ImportClassDefaultedDefs@@QEAAAEAU0@$$QEAU0@@Z"(%struct.ImportClassDefaultedDefs* %this, %struct.ImportClassDefaultedDefs*)
-// G32-DAG: define x86_thiscallcc %struct.ImportClassDefaultedDefs* @_ZN24ImportClassDefaultedDefsaSEOS_(%struct.ImportClassDefaultedDefs* %this, %struct.ImportClassDefaultedDefs*)
-// G64-DAG: define                %struct.ImportClassDefaultedDefs* @_ZN24ImportClassDefaultedDefsaSEOS_(%struct.ImportClassDefaultedDefs* %this, %struct.ImportClassDefaultedDefs*)
+// M32-DAG: define x86_thiscallcc nonnull %struct.ImportClassDefaultedDefs* @"\01??4ImportClassDefaultedDefs@@QAEAAU0@$$QAU0@@Z"(%struct.ImportClassDefaultedDefs* %this, %struct.ImportClassDefaultedDefs* nonnull)
+// M64-DAG: define nonnull                %struct.ImportClassDefaultedDefs* @"\01??4ImportClassDefaultedDefs@@QEAAAEAU0@$$QEAU0@@Z"(%struct.ImportClassDefaultedDefs* %this, %struct.ImportClassDefaultedDefs* nonnull)
+// G32-DAG: define x86_thiscallcc nonnull %struct.ImportClassDefaultedDefs* @_ZN24ImportClassDefaultedDefsaSEOS_(%struct.ImportClassDefaultedDefs* %this, %struct.ImportClassDefaultedDefs* nonnull)
+// G64-DAG: define nonnull                %struct.ImportClassDefaultedDefs* @_ZN24ImportClassDefaultedDefsaSEOS_(%struct.ImportClassDefaultedDefs* %this, %struct.ImportClassDefaultedDefs* nonnull)
 ImportClassDefaultedDefs& ImportClassDefaultedDefs::operator=(ImportClassDefaultedDefs&&) = default; // dllimport ignored
 
 USESPECIALS(ImportClassDefaultedDefs)
